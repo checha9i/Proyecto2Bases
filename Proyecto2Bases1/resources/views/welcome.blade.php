@@ -3,12 +3,13 @@
 
   <head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Half Slider - Start Bootstrap Template</title>
+    <title>Proyecto2 Bases</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -19,94 +20,190 @@
   </head>
 
   <body>
+    <!-- Header -->
+    			<header id="header">
+    				<a href="index.html" class="logo"><strong>Binary</strong> by TEMPLATED</a>
+    				<nav>
+    					<a href="#menu">Menu</a>
+    				</nav>
+    			</header>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="#">Start Bootstrap</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Services</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    		<!-- Nav -->
+    			<nav id="menu">
+    				<ul class="links">
+    					<li><a href="index.html">Home</a></li>
+    					<li><a href="generic.html">Generic</a></li>
+    					<li><a href="elements.html">Elements</a></li>
+    				</ul>
+    			</nav>
 
-    <header>
-      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner" role="listbox">
-          <!-- Slide One - Set the background image for this slide in the line below -->
-          <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
-            <div class="carousel-caption d-none d-md-block">
-              <h3>First Slide</h3>
-              <p>This is a description for the first slide.</p>
-            </div>
-          </div>
-          <!-- Slide Two - Set the background image for this slide in the line below -->
-          <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
-            <div class="carousel-caption d-none d-md-block">
-              <h3>Second Slide</h3>
-              <p>This is a description for the second slide.</p>
-            </div>
-          </div>
-          <!-- Slide Three - Set the background image for this slide in the line below -->
-          <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
-            <div class="carousel-caption d-none d-md-block">
-              <h3>Third Slide</h3>
-              <p>This is a description for the third slide.</p>
-            </div>
-          </div>
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-    </header>
+    		<!-- Banner -->
+    			<section id="banner">
+    				<div class="inner">
+    					<h1>This is Binary, a free and fully responsive<br />
+    					website template by <a href="https://templated.co">TEMPLATED</a></h1>
+    					<ul class="actions">
+    						<li><a href="#one" class="button alt scrolly big">Continue</a></li>
+    					</ul>
+    				</div>
+    			</section>
 
-    <!-- Page Content -->
-    <section class="py-5">
-      <div class="container">
-        <h1>Half Slider by Start Bootstrap</h1>
-        <p>The background images for the slider are set directly in the HTML using inline CSS. The rest of the styles for this template are contained within the
-          <code>half-slider.css</code>
-          file.</p>
-      </div>
-    </section>
+    		<!-- One -->
+    			<article id="one" class="post style1">
+    				<div class="image">
+    					<img src="images/pic14.jpg" alt="" data-position="75% center" />
+    				</div>
+    				<div class="content">
+    					<div class="inner">
+    						<header>
+    							<h2><a href="generic.html">Ipsum lorem sed magna</a></h2>
+    							<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+    						</header>
+    						<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+    						<ul class="actions">
+    							<li><a href="generic.html" class="button alt">Read More</a></li>
+    						</ul>
+    					</div>
+    					<div class="postnav">
+    						<a href="#" class="prev disabled"><span class="icon fa-chevron-up"></span></a>
+    						<a href="#two" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+    					</div>
+    				</div>
+    			</article>
 
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
-      </div>
-      <!-- /.container -->
-    </footer>
+    		<!-- Two -->
+    			<article id="two" class="post invert style1 alt">
+    				<div class="image">
+    					<img src="images/pic13.jpg" alt="" data-position="10% center" />
+    				</div>
+    				<div class="content">
+    					<div class="inner">
+    						<header>
+    							<h2><a href="generic.html">Donec ex risus mollis</a></h2>
+    							<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+    						</header>
+    						<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+    						<ul class="actions">
+    							<li><a href="generic.html" class="button alt">Read More</a></li>
+    						</ul>
+    					</div>
+    					<div class="postnav">
+    						<a href="#one" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+    						<a href="#three" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+    					</div>
+    				</div>
+    			</article>
 
+    		<!-- Three -->
+    			<article id="three" class="post style2">
+    				<div class="image">
+    					<img src="images/pic12.jpg" alt="" data-position="80% center" />
+    				</div>
+    				<div class="content">
+    					<div class="inner">
+    						<header>
+    							<h2><a href="generic.html">Sed tempus interdum</a></h2>
+    							<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+    						</header>
+    						<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+    						<ul class="actions">
+    							<li><a href="generic.html" class="button alt">Read More</a></li>
+    						</ul>
+    					</div>
+    					<div class="postnav">
+    						<a href="#two" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+    						<a href="#four" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+    					</div>
+    				</div>
+    			</article>
+
+    		<!-- Four -->
+    			<article id="four" class="post invert style2 alt">
+    				<div class="image">
+    					<img src="images/pic14.jpg" alt="" data-position="60% center" />
+    				</div>
+    				<div class="content">
+    					<div class="inner">
+    						<header>
+    							<h2><a href="generic.html">Adipiscing sed urna</a></h2>
+    							<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+    						</header>
+    						<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+    						<ul class="actions">
+    							<li><a href="generic.html" class="button alt">Read More</a></li>
+    						</ul>
+    					</div>
+    					<div class="postnav">
+    						<a href="#three" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+    						<a href="#five" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+    					</div>
+    				</div>
+    			</article>
+
+    		<!-- Five -->
+    			<article id="five" class="post style3">
+    				<div class="image">
+    					<img src="images/pic13.jpg" alt="" data-position="5% center" />
+    				</div>
+    				<div class="content">
+    					<div class="inner">
+    						<header>
+    							<h2><a href="generic.html">Interdum et rutrum</a></h2>
+    							<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+    						</header>
+    						<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+    						<ul class="actions">
+    							<li><a href="generic.html" class="button alt">Read More</a></li>
+    						</ul>
+    					</div>
+    					<div class="postnav">
+    						<a href="#four" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+    						<a href="#six" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+    					</div>
+    				</div>
+    			</article>
+
+    		<!-- Six -->
+    			<article id="six" class="post invert style3 alt">
+    				<div class="image">
+    					<img src="images/pic12.jpg" alt="" data-position="80% center" />
+    				</div>
+    				<div class="content">
+    					<div class="inner">
+    						<header>
+    							<h2><a href="generic.html">Magna porta aliquam</a></h2>
+    							<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+    						</header>
+    						<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+    						<ul class="actions">
+    							<li><a href="generic.html" class="button alt">Read More</a></li>
+    						</ul>
+    					</div>
+    					<div class="postnav">
+    						<a href="#five" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+    						<a href="#" class="scrolly next disabled"><span class="icon fa-chevron-down"></span></a>
+    					</div>
+    				</div>
+    			</article>
+
+    		<!-- Footer -->
+    			<footer id="footer">
+    				<ul class="icons">
+    					<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+    					<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+    					<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+    				</ul>
+    				<div class="copyright">
+    					&copy; Untitled. Design: <a href="https://templated.co">TEMPLATED</a>. Images: <a href="https://unsplash.com">Unsplash</a>.
+    				</div>
+    			</footer>
+
+          <!-- Scripts -->
+          			<script src="bootstrap/js/jquery.min.js"></script>
+          			<script src="bootstrap/js/jquery.scrolly.min.js"></script>
+          			<script src="bootstrap/js/skel.min.js"></script>
+          			<script src="bootstrap/js/util.js"></script>
+          			<script src="bootstrap/js/main.js"></script>
     <!-- Bootstrap core JavaScript -->
     <script src="jquery/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
