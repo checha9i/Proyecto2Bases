@@ -22,7 +22,7 @@
   <body>
     <!-- Header -->
     			<header id="header">
-    				<a href="index.html" class="logo"><strong>Binary</strong> by TEMPLATED</a>
+    				<a href="index.html" class="logo"><strong>Proyecto 2</strong>  Procesos</a>
     				<nav>
     					<a href="#menu">Menu</a>
     				</nav>
@@ -31,9 +31,9 @@
     		<!-- Nav -->
     			<nav id="menu">
     				<ul class="links">
-    					<li><a href="index.html">Home</a></li>
-    					<li><a href="generic.html">Generic</a></li>
-    					<li><a href="elements.html">Elements</a></li>
+    					<li><a href="/">Home</a></li>
+    					<li><a href="/login">Login</a></li>
+    					<li><a href="/register">Elements</a></li>
     				</ul>
     			</nav>
 
