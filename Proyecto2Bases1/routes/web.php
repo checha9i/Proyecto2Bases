@@ -11,6 +11,31 @@
 |
 */
 
+
+//get
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+//loginme
+Route::get('/login', function () {
+    return view('Auth/login');
+});
+
+//registerme
+Route::get('/register', function () {
+    return view('Auth/register');
+});
+
+//create
+Route::get('/Admin', function () {
+    return view('/Proceso/Proceso');
+});
+
+
+
+//post
+Route::post('/loginme','LoginController@login');
+Route::post('/registerme','LoginController@register');

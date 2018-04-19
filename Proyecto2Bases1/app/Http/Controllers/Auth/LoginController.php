@@ -1,39 +1,31 @@
 <?php
+namespace App\Http\Controllers;
 
-namespace App\Http\Controllers\Auth;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesResources;
+use DB;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
-class LoginController extends Controller
+class loginController extends BaseController
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+     public function login(Request $req)
+     {
+      $username = $req->input('correo');
+      $password = $req->input('contrasena');
 
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
+      $checkLogin = DB::table('usuario')->where(['correo'=>$username,'contrasena'=>$password])->get();
+      if(count($checkLogin)  >0)
+      {
+       echo "Login SuccessFull<br/>";;
+      }
+      else
+      {
+       echo "Login Faield Wrong Data Passed";
+      }
+     }
 }
+
+?>
