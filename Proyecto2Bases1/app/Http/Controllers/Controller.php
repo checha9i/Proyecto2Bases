@@ -18,6 +18,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+<<<<<<< HEAD
 
     public function login(Request $req)
      {
@@ -694,4 +695,14 @@ public function index()
 
 		
 
+=======
+    public function destroyUser($id) {
+//DB::table('usuario')->where('idusuario', '=', $id)->delete();
+       $date = new \DateTime();
+
+
+     echo "Record deleted successfully.<br/>";
+     echo '<a href="/Operador">Click Here</a> to go back.';
+  }
+>>>>>>> master
 }
