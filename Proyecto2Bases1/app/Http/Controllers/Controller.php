@@ -285,7 +285,7 @@ class Controller extends BaseController
         Session::put('error',"ErrorCondicion");
       return redirect('/AddCondicion');
     }
-
+  }
 }
 
 
