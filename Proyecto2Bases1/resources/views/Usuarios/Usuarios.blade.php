@@ -79,7 +79,7 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 2</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddUser">Crear Proceso</a></li>
+                <li><i class="fa fa-plus"></i><a href="/CrearProceso">Crear Proceso</a></li>
 
               </ul>
             </li>
