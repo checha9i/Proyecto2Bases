@@ -23,7 +23,16 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('Auth/login');
 });
-
+//Condicion
+Route::get('/AddCondicion', function () {
+    return view('Usuarios/AddCondicion');
+});
+Route::get('/ModifyCondicion', function () {
+    return view('Usuarios/EditCondicion');
+});
+Route::get('/DropCondicion', function () {
+    return view('Usuarios/DropCondicion');
+});
 //registerme
 Route::get('/register', function () {
     return view('Auth/register');
@@ -74,16 +83,7 @@ Route::get('/ModifyFlow', function () {
 Route::get('/DropFlow', function () {
     return view('Admin/DropFlow');
 });
-//Employment
-Route::get('/AddEmployment', function () {
-    return view('Admin/AddEmployment');
-});
-Route::get('/ModifyEmployment', function () {
-    return view('Admin/EditEmployment');
-});
-Route::get('/DropEmployment', function () {
-    return view('Admin/DropEmployment');
-});
+
 //Activity
 Route::get('/AddActivity', function () {
     return view('Admin/AddActivity');
@@ -95,11 +95,15 @@ Route::get('/DropActivity', function () {
     return view('Admin/DropActivity');
 });
 
+Route::get('/Usuarios', function () {
+    return view('Usuarios/Usuarios');
+});
 
 
 //post
 Route::post('/loginme','LoginController@login');
 Route::post('/registerme','LoginController@register');
+Route::post('/AddCondition','Controller@AddCondicion');
 
 //deletes
 Route::get('deleteUser/{id}','Controller@destroyUser') ;

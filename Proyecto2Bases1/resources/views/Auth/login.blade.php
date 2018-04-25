@@ -23,7 +23,8 @@
   <body>
     <!-- Header -->
     			<header id="header">
-    				<a href="/" class="logo"><strong>Proyecto 2</strong>  Procesos</a>
+
+            <a class="logo" href="./"><img src="images/logo.png" alt="Logo"></a>
     				<nav>
     					<a href="#menu">Menu</a>
     				</nav>
@@ -52,22 +53,15 @@
 						  			<div class="clear"> </div>
 						  		</div>
 						  		<div>
-						  		<h4>Username</h4>
+						  		<h4>Password</h4>
 								<input type="password" name="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" >
 								  			<div class="clear"> </div>
 								</div>
-								<div class="checkbox-grid">
-									<div class="inline-group green">
-									<label class="radio"><input type="radio" name="radio-inline"><i> </i>Remember me</label>
-									<div class="clear"> </div>
-									</div>
 
-								</div>
 
-								<div class="submit-button">
-									<input type="submit" onclick="myFunction()" value="LOGIN  >" >
-								</div>
-									<div class="clear"> </div>
+									<input type="submit" class="submit-button" onclick="myFunction()" value="LOGIN" >
+
+
 								</div>
 
 						  </form>
