@@ -18,7 +18,10 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-<<<<<<< HEAD
+
+
+
+
 
     public function login(Request $req)
      {

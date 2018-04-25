@@ -34,6 +34,27 @@ Route::get('/Admin', function () {
     return view('Admin/index-admin');
 });
 
+
+
+
+// YOOOOOOOOOOO -----------------------
+
+
+Route::get('/graficar', function () {
+    return view('Graficar/Graficas');
+});
+
+
+Route::get('/CargaUsuario', 'Controller@CargaUsuarios');
+
+
+
+
+// JEJEJEJEJEJEJE
+
+
+
+
 //User
 Route::get('/AddUser', function () {
     return view('Admin/AddUser');
