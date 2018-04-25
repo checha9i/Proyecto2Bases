@@ -22,7 +22,7 @@
   <body>
     <!-- Header -->
     			<header id="header">
-    				<a href="index.html" class="logo"><strong>Binary</strong> by TEMPLATED</a>
+    				<a href="index.html" class="logo"><strong>Proyecto 2</strong>  Procesos</a>
     				<nav>
     					<a href="#menu">Menu</a>
     				</nav>
