@@ -35,9 +35,7 @@ Route::get('/login', function () {
 Route::get('/AddCondicion', function () {
     return view('Usuarios/AddCondicion');
 });
-Route::get('/ModifyCondicion', function () {
-    return view('Usuarios/EditCondicion');
-});
+
 Route::get('/DropCondicion', function () {
     return view('Usuarios/DropCondicion');
 });
@@ -115,4 +113,15 @@ Route::post('/AddCondition','Controller@AddCondicion');
 
 //deletes
 Route::get('deleteUser/{id}','Controller@destroyUser') ;
+Route::get('deleteCondicion/{id}','Controller@destroyCondicion') ;
 
+
+//Edit
+Route::get('/ModifyCondicion', function () {
+    return view('Usuarios/EditCondicion');
+});
+Route::get('/ModifyCondicion1', function () {
+    return view('Usuarios/EditCondicion1');
+});
+Route::get('/editCondicion/{id}','Controller@modifyCondicion') ;
+Route::post('/actualizarCondicion','Controller@actualizarCondicion');

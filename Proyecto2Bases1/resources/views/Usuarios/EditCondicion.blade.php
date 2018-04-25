@@ -1,6 +1,7 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
+$report=DB::select('select * from condicion where tipo="F";');
 
 ?>
 
@@ -194,7 +195,7 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
         <div class="page-header float-right">
           <div class="page-title">
             <ol class="breadcrumb text-right">
-              <li class="active">User</li>
+              <li class="active">Editar Condicion</li>
             </ol>
           </div>
         </div>
@@ -202,6 +203,23 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
     </div>
 
     <div  id="contenido" name="contenido" class="content mt-3">
+  <table class="table table-striped table-bordered" border = "5">
+          <tr>
+                 <th>Condicion</th>
+             <th>Valor</th>
+             <th>Descripcion</th>
+            <th></th>
+          </tr>
+             @foreach($report as $u)
+             <tr>
+                <td>{{ $u->condicion }}</td>
+                <td>{{ $u->valor }}</td>
+                <td>{{ $u->descripcion  }}</td>
+<td> <a href="/editCondicion/{{$u->condicion}}" class="btn btn_danger"> <i class="fa fa-edit"></i> Editar</a>
+
+             </tr>
+             @endforeach
+       </table>
 
 
 

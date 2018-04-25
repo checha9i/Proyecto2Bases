@@ -1,7 +1,8 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
-$report=DB::select('select * from condicion where tipo="F";');
+$report=DB::table('condicion')->where(['condicion'=>Session::get('modifystate'),'tipo'=>"F"])->get();
+
 
 ?>
 
@@ -195,7 +196,7 @@ $report=DB::select('select * from condicion where tipo="F";');
         <div class="page-header float-right">
           <div class="page-title">
             <ol class="breadcrumb text-right">
-              <li class="active">Eliminar Condicion</li>
+              <li class="active">Editar Condicion</li>
             </ol>
           </div>
         </div>
@@ -203,24 +204,29 @@ $report=DB::select('select * from condicion where tipo="F";');
     </div>
 
     <div  id="contenido" name="contenido" class="content mt-3">
+      <form action="/actualizarCondicion" method="post">
+        <div class="form-group">
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        </div>
+        <div class="form-group">
+          <a><?php echo Session::get('modifystate'); ?> </a>
+        </div>
+        <div class="form-group">
 
-      <table class="table table-striped table-bordered" border = "5">
-              <tr>
-                     <th>Condicion</th>
-                 <th>Valor</th>
-                 <th>Descripcion</th>
-                <th></th>
-              </tr>
-                 @foreach($report as $u)
-                 <tr>
-                    <td>{{ $u->condicion }}</td>
-                    <td>{{ $u->valor }}</td>
-                    <td>{{ $u->descripcion  }}</td>
-    <td> <a href="/deleteCondicion/{{$u->condicion}}" class="btn btn_danger"> <i class="fa fa-minus"></i> Eliminar</a>
+          <input type="text"  class="form-control" name="Valor" value="<?php echo $report[0]->valor;?>" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Valor';}" >
+        </div>
+        <div class="form-group">
 
-                 </tr>
-                 @endforeach
-           </table>
+          <input type="text"  class="form-control" name="Descripcion" value="<?php echo $report[0]->descripcion;?>" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Descripcion';}" >
+        </div>
+        <div class="form-group">
+          <div class="submit">
+            <input class="register-link m-t-15 text-center" type="submit"  value="Actualizar Condicion" >
+          </div>
+        </div>
+
+
+      </form>
 
 
 
