@@ -51,6 +51,12 @@
                     </li>
                     <h3 class="menu-title">Administrator</h3><!-- /.menu-title -->
                     <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>CSV</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-plus"></i><a href="/AddUser">Upload CSV</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Users</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-plus"></i><a href="/AddUser">Add User</a></li>
