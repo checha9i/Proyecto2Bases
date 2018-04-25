@@ -24,6 +24,8 @@ Route::get('/AgregarPausa','Controller@AgregarPausa');
 Route::get('/AgregarIntegracion','Controller@AgregarIntegracion');
 Route::get('/AgregarCondicion/{id}','Controller@AgregarCondicion');
 Route::get('/ConfigurarEtapas','Controller@ConfigurarEtapas');
+Route::get('/AgregarDetalleIntegracion/{id}','Controller@AgregarDetalleIntegracion');
+Route::get('/saber/{id}','Controller@saber');
 
 //loginme
 Route::get('/login', function () {

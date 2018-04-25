@@ -194,6 +194,9 @@ class Controller extends BaseController
 				set idestado = 1 where idflujo = :id',
 				['id'=>$id]);	
 
+				$letra = $flujo[0]->tipoetapa;
+				$users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
+				return view('/ConfigurarEtapas', compact('users'));
 			}
 			elseif ($flujo[0]->tipoetapa == 'E')
 			{
@@ -208,15 +211,27 @@ class Controller extends BaseController
 				set idestado = 1 where idflujo = :id',
 				['id'=>$id]);	
 				
+				$letra = $flujo[0]->tipoetapa;
+				$users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
+				return view('/ConfigurarEtapas', compact('users'));
 			}
 			else
 			{
-				echo 'aqui va la integracion';
-			}
-			
-			$letra = $flujo[0]->tipoetapa;
-			$users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
-			return view('/ConfigurarEtapas', compact('users'));
+				
+				$integracion = DB::select('select * from integracion where idintegracion = :tip ', ['tip'=>$flujo[0]->idintegracion]);
+				
+				$affected = DB::update('update integracion 
+				set etapaproxima = :nom  where idintegracion = :id',
+				['nom'=>$SiguienteEtapa, 'id'=>$integracion[0]->idintegracion]);		
+
+				$affected1 = DB::update('update flujo 
+				set idestado = 1 where idflujo = :id',
+				['id'=>$id]);	
+				
+				$letra = $flujo[0]->tipoetapa;
+				$users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
+				return view('/ConfigurarEtapas', compact('users'));
+			}	
 		}
 		else
 		{
@@ -226,6 +241,24 @@ class Controller extends BaseController
 			$Condiciones = DB::select('select * from Condicion where tipo = :tip', ['tip'=> Session::get('Depto')]);
 			return view('/AgregarCondicion', compact('Condiciones'), compact('id'))->with('Letra', $Letra);
 		}
+	}
+	
+	public function AgregarDetalleIntegracion($id)
+	{
+		
+		$data = array('idproceso'=>$id, 'idintegracion'=>Session::get('IntegracionSeleccionada'));		
+		DB::table('detalle_proceso_integracion')->insert($data);	
+		
+		$users = DB::select('select * from proceso');
+		return view('/AgregarDetalleIntegracion', compact('users'));
+	}
+	
+	public function saber($id)
+	{
+		Session::put('IntegracionSeleccionada', $id);
+		
+		$users = DB::select('select * from proceso');
+		return view('/AgregarDetalleIntegracion', compact('users'));
 	}
 	
 	public function ConfigurarEtapas(Request $req)
