@@ -68,6 +68,9 @@
 							</td>
 							<td>
 								<a href="{{url('/AgregarCondicion',$user->idflujo)}}"><span class="label label-danger">Configurar Etapa</span></a>
+								@if ( $user->tipoetapa == 'I' )
+									<a href="{{url('/saber',$user->idintegracion)}}"><span class="label label-success">Administrar Integracion</span></a>
+								@endif
 							</td>
 						</tr>
 					@endforeach
