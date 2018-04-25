@@ -77,7 +77,7 @@
 				</tbody>
 			</table>
 			<center>			
-				<a href="/CrearProceso"><span class="label label-danger">Salir</span></a>
+				<a href="/Usuarios"><span class="label label-danger">Salir</span></a>
 			</center>
   		</div>
   	</div>
