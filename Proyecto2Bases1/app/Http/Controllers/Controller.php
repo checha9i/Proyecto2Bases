@@ -238,7 +238,7 @@ class Controller extends BaseController
 			$flujo = DB::select('select * from flujo where idflujo = :tip ', ['tip'=>$id]);
 
 			$Letra = $flujo[0]->tipoetapa;
-			$Condiciones = DB::select('select * from Condicion where tipo = :tip', ['tip'=> Session::get('Depto')]);
+			$Condiciones = DB::select('select * from condicion where tipo = :tip', ['tip'=> Session::get('Depto')]);
 			return view('/AgregarCondicion', compact('Condiciones'), compact('id'))->with('Letra', $Letra);
 		}
 	}
