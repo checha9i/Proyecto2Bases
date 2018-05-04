@@ -1,7 +1,7 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
-
+$report=DB::table('proceso')->get();
 ?>
 
 <!doctype html>
@@ -118,7 +118,7 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 8</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
+            <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
 
               </ul>
             </li>
@@ -194,7 +194,7 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
         <div class="page-header float-right">
           <div class="page-title">
             <ol class="breadcrumb text-right">
-              <li class="active">User</li>
+              <li class="active">Agregar Condicion</li>
             </ol>
           </div>
         </div>
@@ -202,6 +202,29 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
     </div>
 
     <div  id="contenido" name="contenido" class="content mt-3">
+      <form action="/AnadirGestion" method="post">
+        <div class="form-group">
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        </div>
+        <div class="form-group">
+          <a class="form-control">Seleccionar Proceso</a>
+        </div>
+        <div class="form-group">
+          <select class="form-control" name="process">
+              @foreach($report as $u)
+  <option value="{{$u->idproceso}}" >{{$u->nombre}}</option>
+@endforeach
+</select>
+        </div>
+        <div class="form-group">
+          <div class="submit">
+            <input class="register-link m-t-15 text-center" type="submit" onclick="myFunction()" value="Añadir Gestion" >
+          </div>
+        </div>
+
+
+      </form>
+
 
 
 

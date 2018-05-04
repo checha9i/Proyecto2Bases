@@ -64,14 +64,14 @@
 							</tr>
 					</tbody>
 				</table>
-				<center>			
+				<center>
 					<input type="submit" value="Agregar Etapa" class="btn btn-success">
 				</center>
 				</form>
-				<center>			
+				<center>
 					<a href="/ConfigurarEtapas"><span class="label label-info">Configurar Etapas</span></a>
 					<a href="/Usuarios"><span class="label label-danger">Salir</span></a>
-				</center>		
+				</center>
 			</div>
 		</div>
 	@elseif ( $etapa == 'I' )
@@ -100,14 +100,14 @@
 							</tr>
 					</tbody>
 				</table>
-				<center>			
+				<center>
 					<input type="submit" value="Agregar Etapa" class="btn btn-success">
 				</center>
 				</form>
-				<center>			
+				<center>
 					<a href="/ConfigurarEtapas"><span class="label label-info">Configurar Etapas</span></a>
 					<a href="/Usuarios"><span class="label label-danger">Salir</span></a>
-				</center>		
+				</center>
 			</div>
 		</div>
 	@elseif ( $etapa == 'E' )
@@ -128,14 +128,14 @@
 					<tbody>
 							<tr>
 								<td>
-									<input type="text" name="nombre" id="nombre" placeholder="nombre" class="form-control" required>						
+									<input type="text" name="nombre" id="nombre" placeholder="nombre" class="form-control" required>
 								</td>
 								<td>
 									<select name="SelectUsuario" id="SelectUsuario">
-											<option value="">Elija Usuario</option>											
+											<option value="">Elija Usuario</option>
 											@foreach($users as $user)
 													<option value="{{ $user->idusuario }}">{{ $user->nombre}} {{ $user->apellido}} </option>
-											@endforeach																			
+											@endforeach
 									</select>
 								</td>
 								<td>
@@ -149,14 +149,14 @@
 							</tr>
 					</tbody>
 				</table>
-				<center>			
+				<center>
 					<input type="submit" value="Agregar Etapa" class="btn btn-success">
 				</center>
 				</form>
-				<center>			
+				<center>
 					<a href="/ConfigurarEtapas"><span class="label label-info">Configurar Etapas</span></a>
 					<a href="/Usuarios"><span class="label label-danger">Salir</span></a>
-				</center>		
+				</center>
 			</div>
 		</div>
 	@endif

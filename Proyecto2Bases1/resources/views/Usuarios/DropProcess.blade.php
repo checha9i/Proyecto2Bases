@@ -1,6 +1,7 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
+$report=DB::table('proceso')->get();
 
 ?>
 
@@ -203,6 +204,20 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
 
     <div  id="contenido" name="contenido" class="content mt-3">
 
+      <table class="table table-striped table-bordered" border = "5">
+              <tr>
+                     <th>Proceso</th>
+                <th></th>
+              </tr>
+                 @foreach($report as $u)
+                 <tr>
+                    <td>{{ $u->nombre }}</td>
+
+    <td> <a href="/deleteProceso/{{$u->idproceso}}" class="btn btn_danger"> <i class="fa fa-minus"></i> Eliminar</a>
+
+                 </tr>
+                 @endforeach
+           </table>
 
 
 

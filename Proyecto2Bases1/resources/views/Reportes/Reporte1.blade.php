@@ -1,6 +1,7 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
+$report=DB::select('call CONSULTA1');
 
 ?>
 
@@ -88,7 +89,7 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 3</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddGestion">Atender Gestion</a></li>
+                <li><i class="fa fa-plus"></i><a href="/AddUser">Atender Gestion</a></li>
 
               </ul>
             </li>
@@ -203,6 +204,27 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
 
     <div  id="contenido" name="contenido" class="content mt-3">
 
+      <table class="table table-striped table-bordered" border = "5">
+              <tr>
+                     <th>Proceso</th>
+                <th>Flujo</th>
+                <th>Etapa</th>
+              </tr>
+<?php $cont=0; ?>
+
+<?php foreach ($report as $u): ?>
+  <tr>
+  <td>{{ $report[$cont]->idproceso }}</td>
+  <td>{{ $report[$cont]->idflujo }}</td>
+  <td>{{ $report[$cont]->idetapa }}</td>
+    </tr>
+  <?php $cont++; ?>
+<?php endforeach; ?>
+
+<?php $cont=0; ?>
+
+
+           </table>
 
 
 

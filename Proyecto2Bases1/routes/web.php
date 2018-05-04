@@ -64,20 +64,20 @@ Route::get('/AddProcess', function () {
     return view('Admin/AddProcess');
 });
 Route::get('/ModifyProcess', function () {
-    return view('Admin/EditProcess');
+    return view('Usuarios/EditProcess');
 });
 Route::get('/DropProcess', function () {
-    return view('Admin/DropProcess');
+    return view('Usuarios/DropProcess');
 });
 //Document
 Route::get('/AddDocument', function () {
-    return view('Admin/AddDocument');
+    return view('Usuarios/AddDocument');
 });
 Route::get('/ModifyDocument', function () {
-    return view('Admin/EditDocument');
+    return view('Usuarios/EditDocument');
 });
 Route::get('/DropDocument', function () {
-    return view('Admin/DropDocument');
+    return view('Usuarios/DropDocument');
 });
 //Flow
 Route::get('/AddFlow', function () {
@@ -92,29 +92,43 @@ Route::get('/DropFlow', function () {
 
 //Activity
 Route::get('/AddActivity', function () {
-    return view('Admin/AddActivity');
+    return view('Usuarios/AddActivity');
 });
 Route::get('/ModifyActivity', function () {
-    return view('Admin/EditActivity');
+    return view('Usuarios/EditActivity');
 });
 Route::get('/DropActivity', function () {
-    return view('Admin/DropActivity');
+    return view('Usuarios/DropActivity');
 });
 
+//Gestion
+Route::get('/AddGestion', function () {
+    return view('Usuarios/AddGestion');
+});
+Route::get('/ModifyGestion', function () {
+    return view('Usuarios/EditGestion');
+});
+Route::get('/DropGestion', function () {
+    return view('Usuarios/DropGestion');
+});
 Route::get('/Usuarios', function () {
     return view('Usuarios/Usuarios');
 });
-
+Route::get('/report1', function () {
+    return view('Reportes/Reporte1');
+});
 
 //post
 Route::post('/loginme','LoginController@login');
 Route::post('/registerme','LoginController@register');
 Route::post('/AddCondition','Controller@AddCondicion');
-
+Route::post('/AnadirGestion','Controller@AnadirGestion');
+Route::post('/AnadirDocumento','Controller@AnadirDocumento');
+Route::post('/AnadirActividad','Controller@AnadirActividad');
 //deletes
 Route::get('deleteUser/{id}','Controller@destroyUser') ;
 Route::get('deleteCondicion/{id}','Controller@destroyCondicion') ;
-
+Route::get('deleteProceso/{id}','Controller@destroyProceso') ;
 
 //Edit
 Route::get('/ModifyCondicion', function () {

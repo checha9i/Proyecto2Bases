@@ -82,7 +82,7 @@ Session::put('error',"");
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 2</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddUser">Crear Proceso</a></li>
+                <li><i class="fa fa-plus"></i><a href="/CrearProceso">Crear Proceso</a></li>
 
               </ul>
             </li>
@@ -91,7 +91,7 @@ Session::put('error',"");
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 3</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddUser">Atender Gestion</a></li>
+                <li><i class="fa fa-plus"></i><a href="/AddGestion">Atender Gestion</a></li>
 
               </ul>
             </li>
@@ -112,7 +112,7 @@ Session::put('error',"");
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 7</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddUser">Modificar Proceso</a></li>
+              <li><i class="fa fa-plus"></i><a href="/ModifyProcess">Modificar Proceso</a></li>
 
               </ul>
             </li>
@@ -121,7 +121,7 @@ Session::put('error',"");
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 8</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddUser">Eliminar Proceso</a></li>
+            <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
 
               </ul>
             </li>
