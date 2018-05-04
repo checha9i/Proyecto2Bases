@@ -390,10 +390,10 @@ return redirect("/AddGestion");
 public function AnadirDocumento(Request $req)
 {
   $proceso = Session::get('proceso');
-  $data = array('nombre'=>$req->input('nombre'),'fechahora'=>$req->input('fecha'), 'descripcion'=>$req->input('Descripcion'), 'coordinador'=>$req->input('coordinador'),'lugar'=>$req->input('lugar'));
-  DB::table('actividad')->insert($data);
-  $noactividad=DB::table('actividad')->max('idactivdiad');
-  $data2 =array('tipo'=>'A','usuarioregistrador'=>Session::get('User'),'idactivdiad'=>$noactividad,'idproceso'=>$proceso);
+  $data = array('nombre'=>$req->input('nombre'),'fechahora'=>$req->input('fechahora'), 'descripcion'=>$req->input('Descripcion'), 'ruta'=>$req->input('ruta'),'proceso'=>$proceso);
+  DB::table('documento')->insert($data);
+  $noactividad=DB::table('documento')->max('iddocumento');
+  $data2 =array('tipo'=>'D','usuarioregistrador'=>Session::get('User'),'iddocumento'=>$noactividad,'idproceso'=>$proceso);
   DB::table('gestion')->insert($data2);
 
 return redirect("/AddGestion");
