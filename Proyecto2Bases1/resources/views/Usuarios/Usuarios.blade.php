@@ -1,7 +1,7 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
-
+$nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->count();
 ?>
 
 <!doctype html>
@@ -151,7 +151,7 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
             <div class="dropdown for-notification">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-bell"></i>
-                <span class="count bg-success">99</span>
+                <span class="count bg-success">{{$nonotificiones}}</span>
               </button>
               <div class="dropdown-menu" aria-labelledby="notification">
                 <p class="red">You have 99 Notification</p>
