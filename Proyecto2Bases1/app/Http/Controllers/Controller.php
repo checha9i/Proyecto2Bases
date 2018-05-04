@@ -209,29 +209,29 @@ class Controller extends BaseController
 
 				$affected1 = DB::update('update flujo
 				set idestado = 1 where idflujo = :id',
-				['id'=>$id]);	
-				
+				['id'=>$id]);
+
 				$letra = $flujo[0]->tipoetapa;
 				$users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
 				return view('/ConfigurarEtapas', compact('users'));
 			}
 			else
 			{
-				
-				$integracion = DB::select('select * from integracion where idintegracion = :tip ', ['tip'=>$flujo[0]->idintegracion]);
-				
-				$affected = DB::update('update integracion 
-				set etapaproxima = :nom  where idintegracion = :id',
-				['nom'=>$SiguienteEtapa, 'id'=>$integracion[0]->idintegracion]);		
 
-				$affected1 = DB::update('update flujo 
+				$integracion = DB::select('select * from integracion where idintegracion = :tip ', ['tip'=>$flujo[0]->idintegracion]);
+
+				$affected = DB::update('update integracion
+				set etapaproxima = :nom  where idintegracion = :id',
+				['nom'=>$SiguienteEtapa, 'id'=>$integracion[0]->idintegracion]);
+
+				$affected1 = DB::update('update flujo
 				set idestado = 1 where idflujo = :id',
-				['id'=>$id]);	
-				
+				['id'=>$id]);
+
 				$letra = $flujo[0]->tipoetapa;
 				$users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
 				return view('/ConfigurarEtapas', compact('users'));
-			}	
+			}
 		}
 		else
 		{
@@ -245,22 +245,22 @@ class Controller extends BaseController
 
 	public function AgregarDetalleIntegracion($id)
 	{
-		
-		$data = array('idproceso'=>$id, 'idintegracion'=>Session::get('IntegracionSeleccionada'));		
-		DB::table('detalle_proceso_integracion')->insert($data);	
-		
+
+		$data = array('idproceso'=>$id, 'idintegracion'=>Session::get('IntegracionSeleccionada'));
+		DB::table('detalle_proceso_integracion')->insert($data);
+
 		$users = DB::select('select * from proceso');
 		return view('/AgregarDetalleIntegracion', compact('users'));
 	}
-	
+
 	public function saber($id)
 	{
 		Session::put('IntegracionSeleccionada', $id);
-		
+
 		$users = DB::select('select * from proceso');
 		return view('/AgregarDetalleIntegracion', compact('users'));
 	}
-	
+
 
 	public function ConfigurarEtapas(Request $req)
 	{
@@ -343,4 +343,60 @@ return redirect('/ModifyCondicion');
       return redirect('/AddCondicion');
     }
   }
+  //$Proceso
+  public function destroyProceso($id) {
+    DB::table('flujo')->where('idproceso', '=', $id)->delete();
+  DB::table('detalle_proceso_departamento')->where('idproceso', '=', $id)->delete();
+    DB::table('detalle_proceso_integracion')->where('idproceso', '=', $id)->delete();
+    DB::table('proceso')->where('idproceso', '=', $id)->delete();
+  return redirect("/DropProcess");
+  }
+
+//Gestion
+public function AnadirGestion(Request $req)
+{
+  $proceso = $req->input('process');
+    $tipos = DB::table('proceso')->where(['idproceso'=>$proceso])->get();
+
+    if ($tipos[0]->tipo =='A')
+    {
+
+Session::put('proceso',$proceso);
+      return redirect("/AddActivity");
+    }else if($tipos[0]->tipo == 'D')
+    {
+      Session::put('proceso',$proceso);
+            return redirect("/AddDocument");
+    }
+
+return redirect("/AddGestion");
+}
+
+//Actividad
+public function AnadirActividad(Request $req)
+{
+  $proceso = Session::get('proceso');
+  $data = array('nombre'=>$req->input('nombre'),'fechahora'=>$req->input('fecha'), 'descripcion'=>$req->input('Descripcion'), 'coordinador'=>$req->input('coordinador'),'lugar'=>$req->input('lugar'));
+  DB::table('actividad')->insert($data);
+  $noactividad=DB::table('actividad')->max('idactivdiad');
+  $data2 =array('tipo'=>'A','usuarioregistrador'=>Session::get('User'),'idactivdiad'=>$noactividad,'idproceso'=>$proceso);
+  DB::table('gestion')->insert($data2);
+
+return redirect("/AddGestion");
+}
+
+
+//Documento
+public function AnadirDocumento(Request $req)
+{
+  $proceso = Session::get('proceso');
+  $data = array('nombre'=>$req->input('nombre'),'fechahora'=>$req->input('fecha'), 'descripcion'=>$req->input('Descripcion'), 'coordinador'=>$req->input('coordinador'),'lugar'=>$req->input('lugar'));
+  DB::table('actividad')->insert($data);
+  $noactividad=DB::table('actividad')->max('idactivdiad');
+  $data2 =array('tipo'=>'A','usuarioregistrador'=>Session::get('User'),'idactivdiad'=>$noactividad,'idproceso'=>$proceso);
+  DB::table('gestion')->insert($data2);
+
+return redirect("/AddGestion");
+}
+
 }

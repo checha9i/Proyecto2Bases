@@ -1,7 +1,6 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
-
 ?>
 
 <!doctype html>
@@ -118,7 +117,7 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 8</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
+            <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
 
               </ul>
             </li>
@@ -194,7 +193,7 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
         <div class="page-header float-right">
           <div class="page-title">
             <ol class="breadcrumb text-right">
-              <li class="active">User</li>
+              <li class="active">Agregar Actividad</li>
             </ol>
           </div>
         </div>
@@ -202,6 +201,38 @@ $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')
     </div>
 
     <div  id="contenido" name="contenido" class="content mt-3">
+      <form action="/AnadirActividad" method="post">
+        <div class="form-group">
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        </div>
+        <div class="form-group">
+          <input type="text"  class="form-control" name="nombre" value="nombre" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'nombre';}" >
+        </div>
+        <div class="form-group">
+
+          <input type="text"  class="form-control" name="fecha" value="fecha: yyyy/mm/dd" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'yyyy/mm/dd';}" >
+        </div>
+        <div class="form-group">
+
+          <input type="text"  class="form-control" name="coordinador" value="Coordinador" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'COORDINADOR';}" >
+        </div>
+        <div class="form-group">
+
+          <input type="text"  class="form-control" name="lugar" value="lugar" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'lugar ';}" >
+        </div>
+        <div class="form-group">
+
+          <input type="text"  class="form-control" name="Descripcion" value="Descripcion" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Descripcion';}" >
+        </div>
+        <div class="form-group">
+          <div class="submit">
+            <input class="register-link m-t-15 text-center" type="submit" onclick="myFunction()" value="Agregar Actividad " >
+          </div>
+        </div>
+
+
+      </form>
+
 
 
 

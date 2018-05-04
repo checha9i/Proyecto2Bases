@@ -106,7 +106,7 @@
 				</form>
 				<center>
 					<a href="/ConfigurarEtapas"><span class="label label-info">Configurar Etapas</span></a>
-					<a href="/CrearProceso"><span class="label label-danger">Salir</span></a>
+					<a href="/Usuarios"><span class="label label-danger">Salir</span></a>
 				</center>
 			</div>
 		</div>
@@ -155,7 +155,7 @@
 				</form>
 				<center>
 					<a href="/ConfigurarEtapas"><span class="label label-info">Configurar Etapas</span></a>
-					<a href="/CrearProceso"><span class="label label-danger">Salir</span></a>
+					<a href="/Usuarios"><span class="label label-danger">Salir</span></a>
 				</center>
 			</div>
 		</div>
