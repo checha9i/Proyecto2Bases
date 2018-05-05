@@ -285,7 +285,12 @@ class Controller extends BaseController
     echo "Record deleted successfully.<br/>";
     echo '<a href="/Operador">Click Here</a> to go back.';
   }
-
+  public function destroyGestion($id) {
+    DB::table('copiaflujo')->where('idgestion', '=', $id)->delete();
+    DB::table('notificacion')->where('idgestion', '=', $id)->delete();
+    DB::table('gestion')->where('idgestion', '=', $id)->delete();
+    return redirect("/DropGestion");
+  }
 
   //$Condiciones
   public function destroyCondicion($id) {
@@ -418,4 +423,49 @@ $condicion=$req->input('condicion');
     return redirect('/Usuarios');
   }
 
+  public function consulta2(Request $req)
+  {
+    $para=$req->input('Valor');
+    Session::put('par1',$para);
+    return redirect('/Reportea2');
+  }
+
+  public function consulta3(Request $req)
+  {
+    $para=$req->input('Valor');
+    Session::put('par2',$para);
+    return redirect('/Reportea3');
+  }
+  public function consulta5(Request $req)
+  {
+    $para=$req->input('Valor');
+    $para1=$req->input('Valor2');
+    Session::put('par3',$para);
+    Session::put('par4',$para1);
+    return redirect('/Reportea5');
+  }
+  public function consulta6(Request $req)
+  {
+    $para=$req->input('Valor');
+    $para1=$req->input('Valor2');
+    Session::put('par3',$para);
+    Session::put('par4',$para1);
+    return redirect('/Reportea6');
+  }
+  public function consulta8(Request $req)
+  {
+    $para=$req->input('Valor');
+    $para1=$req->input('Valor2');
+    Session::put('par1',$para);
+    Session::put('par2',$para1);
+    return redirect('/Reportea8');
+  }
+  public function consulta12(Request $req)
+  {
+    $para=$req->input('Valor');
+    $para1=$req->input('Valor2');
+    Session::put('par1',$para);
+    Session::put('par2',$para1);
+    return redirect('/Reportea12');
+  }
 }

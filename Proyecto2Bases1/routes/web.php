@@ -114,8 +114,61 @@ Route::get('/DropGestion', function () {
 Route::get('/Usuarios', function () {
     return view('Usuarios/Usuarios');
 });
-Route::get('/report1', function () {
+Route::get('/Reporte1', function () {
     return view('Reportes/Reporte1');
+});
+Route::get('/Reporte2', function () {
+    return view('Reportes/Reporte2');
+});
+
+Route::get('/Reportea2', function () {
+    return view('Reportes/Reportea2');
+});
+Route::get('/Reporte3', function () {
+    return view('Reportes/Reporte3');
+});
+Route::get('/Reportea3', function () {
+    return view('Reportes/Reportea3');
+});
+Route::get('/Reporte4', function () {
+    return view('Reportes/Reporte4');
+});
+Route::get('/Reporte5', function () {
+    return view('Reportes/Reporte5');
+});
+
+Route::get('/Reportea5', function () {
+    return view('Reportes/Reportea5');
+});
+Route::get('/Reporte6', function () {
+    return view('Reportes/Reporte6');
+});
+Route::get('/Reportea6', function () {
+    return view('Reportes/Reportea6');
+});
+Route::get('/Reporte7', function () {
+    return view('Reportes/Reporte7');
+});
+Route::get('/Reporte8', function () {
+    return view('Reportes/Reporte8');
+});
+Route::get('/Reportea8', function () {
+    return view('Reportes/Reportea8');
+});
+Route::get('/Reporte9', function () {
+    return view('Reportes/Reporte9');
+});
+Route::get('/Reporte10', function () {
+    return view('Reportes/Reporte10');
+});
+Route::get('/Reporte11', function () {
+    return view('Reportes/Reporte11');
+});
+Route::get('/Reporte12', function () {
+    return view('Reportes/Reporte12');
+});
+Route::get('/Reportea12', function () {
+    return view('Reportes/Reportea12');
 });
 
 Route::get('/Notificacion', function () {
@@ -138,6 +191,7 @@ Route::post('/AnadirActividad','Controller@AnadirActividad');
 Route::get('deleteUser/{id}','Controller@destroyUser') ;
 Route::get('deleteCondicion/{id}','Controller@destroyCondicion') ;
 Route::get('deleteProceso/{id}','Controller@destroyProceso') ;
+Route::get('deleteGestion/{id}','Controller@destroyGestion') ;
 
 //Edit
 Route::get('/ModifyCondicion', function () {
@@ -148,3 +202,10 @@ Route::get('/ModifyCondicion1', function () {
 });
 Route::get('/editCondicion/{id}','Controller@modifyCondicion') ;
 Route::post('/actualizarCondicion','Controller@actualizarCondicion');
+
+Route::post('/consulta2','Controller@consulta2');
+Route::post('/consulta3','Controller@consulta3');
+Route::post('/consulta5','Controller@consulta5');
+Route::post('/consulta6','Controller@consulta6');
+Route::post('/consulta8','Controller@consulta8');
+Route::post('/consulta12','Controller@consulta12');

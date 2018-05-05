@@ -1,8 +1,9 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
-$report=DB::select('call CONSULTA1');
-
+$nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->count();
+$notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->get();
+$result=DB::select('call CONSULTA1');
 ?>
 
 <!doctype html>
@@ -72,7 +73,20 @@ $report=DB::select('call CONSULTA1');
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 1</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddUser">Generar Reportes</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte1">Reporte 1</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte2">Reporte 2</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte3">Reporte 3</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte4">Reporte 4</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte5">Reporte 5</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte6">Reporte 6</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte7">Reporte 7</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte8">Reporte 8</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte9">Reporte 9</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte10">Reporte 10</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte11">Reporte 11</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte12">Reporte 12</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte13">Reporte 13</a></li>
+                <li><i class="fa fa-area-chart"></i><a href="/Reporte14">Reporte 14</a></li>
 
               </ul>
             </li>
@@ -84,16 +98,17 @@ $report=DB::select('call CONSULTA1');
 
               </ul>
             </li>
-
           <?php elseif ($u->permiso==3): ?>
+        <?php Session::put('boolnotificacion',1) ?>
+
+          <?php elseif ($u->permiso==5): ?>
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 3</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddUser">Atender Gestion</a></li>
+                <li><i class="fa fa-plus"></i><a href="/AddGestion">Crear Gestion</a></li>
 
               </ul>
             </li>
-
 
 
 
@@ -101,7 +116,7 @@ $report=DB::select('call CONSULTA1');
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 6</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddUser">Eliminar Gestion</a></li>
+                <li><i class="fa fa-plus"></i><a href="/DropGestion">Eliminar Gestion</a></li>
 
               </ul>
             </li>
@@ -148,21 +163,40 @@ $report=DB::select('call CONSULTA1');
           <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
           <div class="header-left">
 
+            <?php if (Session::get('boolnotificacion')==1 ): ?>
+              <div class="dropdown for-notification">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-bell"></i>
+                  <span class="count bg-success">{{$nonotificiones}}</span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="notification">
+                  <p class="red">Tienes {{$nonotificiones}} notificaciones</p>
+              @foreach($notificaciones as $u)
 
-            <div class="dropdown for-notification">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-bell"></i>
-                <span class="count bg-success">99</span>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="notification">
-                <p class="red">You have 99 Notification</p>
-                <a class="dropdown-item media bg-flat-color-1" href="#">
-                  <i class="fa fa-check"></i>
-                  <p>Server #1 overloaded.</p>
-                </a>
 
+              <?php
+              $procesonot=DB::table('proceso')->where(['idproceso'=>$u->idproceso])->get()
+              ?>
+
+
+                  <a class="dropdown-item media bg-flat-color-1" href="/mostrarnotificacion/{{$u->idgestion}}">
+                    <i class="fa fa-check"></i>
+                  <?php if ($procesonot[0]->tipo=='A'): ?>
+                    <?php $nombrenotpro=DB::select('select nombre from gestion g, actividad a where g.idactivdiad = a.idactivdiad') ?>
+                  <p>{{$procesonot[0]->nombre}}-{{$nombrenotpro[0]->nombre}}</p>
+                  <?php else: ?>
+                    <?php $nombrenotpro=DB::select('select nombre from gestion g, documento a where g.iddocumento = a.iddocumento') ?>
+                  <p>{{$procesonot[0]->nombre}}-{{$nombrenotpro[0]->nombre}}</p>
+
+                  <?php endif; ?>
+
+
+                  </a>
+              @endforeach
+                </div>
               </div>
-            </div>
+            <?php endif; ?>
+
 
 
           </div>
@@ -207,25 +241,20 @@ $report=DB::select('call CONSULTA1');
       <table class="table table-striped table-bordered" border = "5">
               <tr>
                      <th>Proceso</th>
-                <th>Flujo</th>
+                     <th>Nombre</th>
+                     <th>Flujo</th>
                 <th>Etapa</th>
               </tr>
-<?php $cont=0; ?>
+                 @foreach($result as $u)
+                 <tr>
+                    <td>{{ $u->idproceso }}</td>
+                    <td>{{ $u->nombre }}</td>
+                    <td>{{ $u->idflujo }}</td>
+                    <td>{{ $u->idetapa }}</td>
 
-<?php foreach ($report as $u): ?>
-  <tr>
-  <td>{{ $report[$cont]->idproceso }}</td>
-  <td>{{ $report[$cont]->idflujo }}</td>
-  <td>{{ $report[$cont]->idetapa }}</td>
-    </tr>
-  <?php $cont++; ?>
-<?php endforeach; ?>
-
-<?php $cont=0; ?>
-
-
+                 </tr>
+                 @endforeach
            </table>
-
 
 
     </div> <!-- .content -->
