@@ -2,6 +2,8 @@
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
 $nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->count();
+$notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->get();
+
 ?>
 
 <!doctype html>
@@ -84,16 +86,18 @@ $nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('Use
               </ul>
             </li>
 
-          <?php elseif ($u->permiso==3): ?>
+          <?php elseif ($u->permiso==5): ?>
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 3</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddGestion">Atender Gestion</a></li>
+                <li><i class="fa fa-plus"></i><a href="/AddGestion">Crear Gestion</a></li>
 
               </ul>
             </li>
 
-
+          <?php elseif ($u->permiso==3): ?>
+        <?php
+        Session::put('boolnotificacion','1') ?>
 
 
           <?php elseif ($u->permiso==6): ?>
@@ -154,12 +158,29 @@ $nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('Use
                 <span class="count bg-success">{{$nonotificiones}}</span>
               </button>
               <div class="dropdown-menu" aria-labelledby="notification">
-                <p class="red">You have 99 Notification</p>
-                <a class="dropdown-item media bg-flat-color-1" href="#">
-                  <i class="fa fa-check"></i>
-                  <p>Server #1 overloaded.</p>
-                </a>
+                <p class="red">Tienes {{$nonotificiones}} notificaciones</p>
+  @foreach($notificaciones as $u)
 
+
+<?php
+$procesonot=DB::table('proceso')->where(['idproceso'=>$u->idproceso])->get()
+?>
+
+
+                <a class="dropdown-item media bg-flat-color-1" href="/mostrarnotificacion/{{$u->idgestion}}">
+                  <i class="fa fa-check"></i>
+                <?php if ($procesonot[0]->tipo=='A'): ?>
+                  <?php $nombrenotpro=DB::select('select nombre from gestion g, actividad a where g.idactivdiad = a.idactivdiad') ?>
+                <p>{{$procesonot[0]->nombre}}-{{$nombrenotpro[0]->nombre}}</p>
+                <?php else: ?>
+                  <?php $nombrenotpro=DB::select('select nombre from gestion g, documento a where g.iddocumento = a.iddocumento') ?>
+                <p>{{$procesonot[0]->nombre}}-{{$nombrenotpro[0]->nombre}}</p>
+
+                <?php endif; ?>
+
+
+                </a>
+@endforeach
               </div>
             </div>
 

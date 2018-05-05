@@ -118,7 +118,16 @@ Route::get('/report1', function () {
     return view('Reportes/Reporte1');
 });
 
+Route::get('/Notificacion', function () {
+    return view('Usuarios/MostrarNotificacion');
+});
+
+//notificaciones
+Route::get('mostrarnotificacion/{id}','Controller@mostrarnotificacion') ;
+
 //post
+
+Route::post('/detalleetapa','Controller@detalleetapacondicion1');
 Route::post('/loginme','LoginController@login');
 Route::post('/registerme','LoginController@register');
 Route::post('/AddCondition','Controller@AddCondicion');

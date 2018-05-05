@@ -1,9 +1,16 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
-$report=DB::select('select * from proceso;');
 $nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->count();
 $notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->get();
+$Gestion=Session::get('gestionamostar');
+$detalle=DB::select('select distinct( d.condicion), d.etapaproxima, n.idproceso,n.numeroetapa
+from detalle_condicion_etapa d, notificacion n, copiaflujo f, etapa e,gestion g
+where n.idproceso = f.idproceso and f.numeroetapa = n.numeroetapa and f.idetapa = e.idetapa and e.idetapa = d.idetapa and n.idgestion=:idg;',[':idg'=>$Gestion]);
+Session::put('procesonotificacion',$detalle[0]->idproceso);
+Session::put('numeroetapa',$detalle[0]->numeroetapa);
+
+
 ?>
 
 <!doctype html>
@@ -153,15 +160,32 @@ $notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('Use
             <div class="dropdown for-notification">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-bell"></i>
-                <span class="count bg-success">99</span>
+                <span class="count bg-success">{{$nonotificiones}}</span>
               </button>
               <div class="dropdown-menu" aria-labelledby="notification">
-                <p class="red">You have 99 Notification</p>
-                <a class="dropdown-item media bg-flat-color-1" href="#">
-                  <i class="fa fa-check"></i>
-                  <p>Server #1 overloaded.</p>
-                </a>
+                <p class="red">Tienes {{$nonotificiones}} notificaciones</p>
+  @foreach($notificaciones as $u)
 
+
+<?php
+$procesonot=DB::table('proceso')->where(['idproceso'=>$u->idproceso])->get()
+?>
+
+
+                <a class="dropdown-item media bg-flat-color-1" href="/mostrarnotificacion/{{$u->idgestion}}">
+                  <i class="fa fa-check"></i>
+                <?php if ($procesonot[0]->tipo=='A'): ?>
+                  <?php $nombrenotpro=DB::select('select nombre from gestion g, actividad a where g.idactivdiad = a.idactivdiad') ?>
+                <p>{{$procesonot[0]->nombre}}-{{$nombrenotpro[0]->nombre}}</p>
+                <?php else: ?>
+                  <?php $nombrenotpro=DB::select('select nombre from gestion g, documento a where g.iddocumento = a.iddocumento') ?>
+                <p>{{$procesonot[0]->nombre}}-{{$nombrenotpro[0]->nombre}}</p>
+
+                <?php endif; ?>
+
+
+                </a>
+@endforeach
               </div>
             </div>
 
@@ -196,7 +220,7 @@ $notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('Use
         <div class="page-header float-right">
           <div class="page-title">
             <ol class="breadcrumb text-right">
-              <li class="active">Editar Proceso</li>
+              <li class="active">User</li>
             </ol>
           </div>
         </div>
@@ -204,24 +228,21 @@ $notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('Use
     </div>
 
     <div  id="contenido" name="contenido" class="content mt-3">
-
-      <table class="table table-striped table-bordered" border = "5">
-              <tr>
-                     <th>Proceso</th>
-                <th></th>
-              </tr>
-                 @foreach($report as $u)
-                 <tr>
-                    <td>{{ $u->nombre }}</td>
-
-    <td> <a href="/deleteCondicion/{{$u->idproceso}}" class="btn btn_danger"> <i class="fa fa-edit"></i> Editar</a>
-
-                 </tr>
-                 @endforeach
-           </table>
-
-
-
+  <form action="/detalleetapa" method="post">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <div class="form-group">
+      <select class="form-control" name="condicion">
+        @foreach($detalle as $u)
+    <option value="{{$u->condicion}}" >{{$u->condicion}}</option>
+    @endforeach
+    </select>
+    </div>
+    <div class="form-group">
+      <div class="submit">
+        <input class="register-link m-t-15 text-center" type="submit" onclick="myFunction()" value="Enviar" >
+      </div>
+    </div>
+  </form>
     </div> <!-- .content -->
   </div><!-- /#right-panel -->
 

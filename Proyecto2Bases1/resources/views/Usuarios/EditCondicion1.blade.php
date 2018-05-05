@@ -3,7 +3,8 @@
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
 $report=DB::table('condicion')->where(['condicion'=>Session::get('modifystate'),'tipo'=>"F"])->get();
 
-
+$nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->count();
+$notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->get();
 ?>
 
 <!doctype html>
@@ -90,7 +91,7 @@ $report=DB::table('condicion')->where(['condicion'=>Session::get('modifystate'),
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 3</a>
               <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-plus"></i><a href="/AddGestion">Atender Gestion</a></li>
+                <li><i class="fa fa-plus"></i><a href="/AddGestion">Crear Gestion</a></li>
 
               </ul>
             </li>
