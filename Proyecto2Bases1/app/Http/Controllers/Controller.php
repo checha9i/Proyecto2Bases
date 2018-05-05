@@ -7,754 +7,396 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Maatwebsite\Excel\Facades\Excel;
-
-
-
-
+use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use DB;
 use Session;
 
-use App\Http\Requests;
-use Charts;
 
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-
-
- public function CargaUsuarios()
-     {
-      $items=DB::SELECT('SELECT * FROM UsuPermiso');
-          return view('CargaUsuario/uspermiso',compact('items'));
-
-
-     }
-
-
- public function import(Request $request)
+  public function CrearProceso(Request $req)
     {
-      if($request->file('imported-file'))
+    Session::put('EtapaFinal', 0);
+    Session::put('NumeroEtapa', 0);
+    $nombre = $req->input('nombre');
+    $fecha_creacion = $req->input('fecha_creacion');
+    $fecha_vigencia_inicio = $req->input('fecha_vigencia_inicio');
+    $fecha_vigencia_fin = $req->input('fecha_vigencia_fin');
+    $descripcion = $req->input('descripcion');
+    $tipo = $req->input('tipo');
+    $etapa = $req->input('etapa');
+    $depto = $req->input('depto');
+    if ($nombre != null)
+    {
+      $data = array('nombre'=>$nombre,'fecha_creacion'=>$fecha_creacion,'fecha_vigencia_inicio'=>$fecha_vigencia_inicio,'fecha_vigencia_fin'=>$fecha_vigencia_fin,'descripcion'=>$descripcion,'tipo'=>$tipo);
+
+      DB::table('proceso')->insert($data);
+
+      $NumProceso = DB::select('select idproceso from proceso ORDER BY idproceso DESC');
+
+      $NumDepto = DB::select('select * from departamento where nombre = :nom',['nom'=>$depto]);
+
+      $data1 = array('iddepartamento'=>$NumDepto[0]->iddepartamento,'idproceso'=>$NumProceso[0]->idproceso);
+      DB::table('detalle_proceso_departamento')->insert($data1);
+
+      Session::put('NumProceso', $NumProceso[0]->idproceso);
+      Session::put('Depto', substr($depto, 0, 1));
+      if ($etapa == 'E')
       {
-                $path = $request->file('imported-file')->getRealPath();
-      
-
-            $data = Excel::load($path, function($reader) {})->get()->toArray();
-        } else {
-            $data = array_map('str_getcsv', file($path));
-        }
-
-          if(!empty($data) && $data->count())
-          {
-            foreach ($data->toArray() as $row)
-            {
-              if(!empty($row))
-              {
-                $dataArray[] =
-                [
-                  'item_name' => $row['NOMBRE'],
-                  'item_code' => $row['PERMISO'],
-                  'item_price' => $row['Detalle'],
-                 
-                ];
-              }
-          }
-          if(!empty($dataArray))
-          {
-             Item::insert($dataArray);
-             return back();
-           }
-         }
-       }
-  
-
-
-
-
-
-    public function login(Request $req)
-     {
-      $username = $req->input('form-username');
-      $password = $req->input('form-password');
-      $date = new \DateTime();
-      Session::put('USU', $req->input('form-username'));
-
-      $checkLogin = DB::select('select * from usuario where nombre = :id and contrasenia = :contra ', [ 'id' => $username, 'contra' => $password]);
-
-
-
-      if ( $checkLogin!=null) {
-      $tipoUsuario= $checkLogin[0]->tipo_puesto_id_puesto;
-
-	      if ($tipoUsuario==1) {
-
-
-            	$NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Ingreso Al sistema']);
-
-
-
-	      	    return redirect('/Admin');
-
-	      }else if ($tipoUsuario==2) {
-  			return redirect('/Operador');
-      // AQUÍ VA EL OPERARIOR
-
-
-	      }else if ($tipoUsuario==3) {
-
-  	return redirect('/UsuarioPrincipal');
-
-	      }else {
-      // AQUÍ VA EL CLIENTE
-echo "<script type='text/javascript'>alert('Error no existe el usuario');</script>";
-return redirect('/#sign-in');
-
-	      }
-
-  }
-echo "<script type='text/javascript'>alert('Error  No existe el usuario');</script>";
-  return redirect('/#sign-in');
-
-  }
-
- public function end(Request $req){
-
- 	Session::put('USU', $req->input(''));
-
- 	return redirect('/END');
-
- }
-
-
-
-
-
-  public function CrearFormulario(Request $req)
-     {
-       $date = new \DateTime();
-      $NombreF = $req->input('NForm');
-      if ($NombreF != null)
-          {
-			   Session::put('NumPreg', $req->input('Num'));
-               DB::table('formulario')->insert(['NombreF'=>$NombreF,'fecha'=>$date]);
-
-			   $Form = DB::select('select * from formulario order by id_examen DESC');
-			   Session::put('IdForm', $Form[0]->id_examen);
-
-
-			   $NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Crea el formulario']);
-
-
-			   Session::put('NombreFormulario',$NombreF);
-               return view('Questions/PrimeraPregunta');
-        }else{
-             //return redirect('/Operador');
-            echo 'hola jeje';
-        }
-
+        $users=DB::select('select * from usuario ORDER BY idusuario ASC');
+        //var_dump($users);
+        return view('/AgregarEtapa', compact('etapa'), compact('users'));
+      }
+      else
+      {
+        return view('/AgregarEtapa', compact('etapa'));
+      }
+    }
+    else
+    {
+      return view('/CrearProceso');
+    }
   }
 
 
- public function registrarop(Request $req)
-     {
-     	  $username = $req->input('first_name');
-	      $lasname= $req->input('last_name');
-	      $password = $req->input('password');
-	      $email= $req->input('email');
-	      $Salario= $req->input('Salario');
-	      $pass1= $req->input('password_confirmation');
-	      $date = new \DateTime();
-	        if ($password==$pass1){
-
-	      	 DB::table('usuario')->insert(['nombre'=>$username,'Apellido'=>$lasname,'contrasenia'=>$password,'email'=>$email,'salario'=>$Salario,
-	      	      	'tipo_puesto_id_puesto'=>2]);
-
-
-	        	DB::table('bitacora')->insert(['nombreUsu'=>$username,'fecha'=>$date,'detalle'=>'Crea el formulario']);
-
-	      	     return redirect('/Login');
-
-	          }else {
-
-	          	 return redirect('/ERROR');
-	          }
-
-
-     }
-
-public function eliminarOperadores(Request $req)
-     {
-
-     	$user4=DB::select('select * from usuario');
-
-
-		return view('Auth/Eop',compact('user4'));
-
-   	 }
-
-
-     public function EliminarPreguntas(Request $req)
-          {
-          	$formu=DB::select('select * from formulario');
-
-     		return view('Auth/SelFormEli',compact('formu'));
-        	 }
-
-           public function EliminarPregunta(Request $req,$id)
-                {
-                	$formu=DB::select('select * from pregunta p, formulario f where f.id_examen = :id', [ 'id' => $id]);
-
-           		return view('Auth/EliminarPregunta',compact('formu'));
-              	 }
-
-     public function EliminarFormulario(Request $req)
-          {
-          	$date = new \DateTime();
-          	$Formu=DB::select('select * from formulario');
-
-          	 $NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Elimina Formulario']);
-
-     		return view('Questions/BorrarFormulario',compact('Formu'));
-
-        	 }
-
-
- public function destroy($id) {
-
- 		$date = new \DateTime();
-
-       $NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Eliminar Operadores ['.$id.']' ]);
-
-
-      DB::delete('delete from usuario where id_usu = ?',[$id]) ;
-
-
-
-      echo "Record deleted successfully.<br/>";
-      echo '<a href="/Admin">Click Here</a> to go back.';
-   }
-
-
-
-
- public function destroyF($id) {
-   DB::delete('delete * from pregunta where id_examen = ? ',[$id]) ;
-   DB::delete('delete from formulario where id_examen = ? ',[$id]) ;
-        $date = new \DateTime();
-      $NombreF=Session::get('USU');
-	     DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Eliminó Pregunta ['.$id.']' ]);
-
-      echo "Record deleted successfully.<br/>";
-      echo '<a href="/Operador">Click Here</a> to go back.';
-   }
-
-   public function destroyP(Request $req,$id) {
-
-     DB::delete('delete from respuestacliente where preguntaformulario_idpreguntaformulario= (select idpreguntaformulario from preguntaformulario where pregunta_idpregunta=:id ) ', ['id'=>$id]);
-      DB::delete('delete  from preguntaformulario where pregunta_idpregunta = ?', [$id]);
-          DB::delete('delete  from pregunta where idpregunta = ?', [$id]);
-        $date = new \DateTime();
-           $NombreF=Session::get('USU');
-         DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Eliminó Pregunta ['.$id.']' ]);
-
-        echo "Record deleted successfully.<br/>";
-        echo '<a href="/Admin">Click Here</a> to go back.';
-     }
-
- public function edit( Request $req,$id=null) {
-
-  $editar = DB::table('usuario')-> where (['id_usu'=>$id])->get();
-
-  $editar->nombre = $req->input('name');
-
-  if ($editar->nombre != null)
+  public function AgregarEtapa(Request $req)
   {
-    echo 'update';
-    // return redirect('/EliminarOp');
+    $nombre = $req->input('nombre');
+    $SelectUsuario = $req->input('SelectUsuario');
+    $etapa = $req->input('etapa');
+
+    if ($nombre != null)
+    {
+      Session::put('NumeroEtapa', Session::get('NumeroEtapa')+1);
+      $data = array('nombre'=>$nombre,'idusuario'=>$SelectUsuario);
+      DB::table('etapa')->insert($data);
+
+      $NumEtapa = DB::select('select * from etapa ORDER BY idetapa DESC');
+      Session::put('EtapaTrabaja', $NumEtapa[0]->idetapa);
+      $data1 = array('tipoetapa'=>'E','idproceso'=>Session::get('NumProceso'), 'idetapa'=>$NumEtapa[0]->idetapa, 'idestado'=> 6, 'numeroetapa'=>Session::get('NumeroEtapa'));
+      DB::table('flujo')->insert($data1);
+
+      if ($etapa == 'E')
+      {
+        $users=DB::select('select * from usuario ORDER BY idusuario ASC');
+        //var_dump($users);
+        return view('/AgregarEtapa', compact('etapa'), compact('users'));
+      }
+      else
+      {
+        return view('/AgregarEtapa', compact('etapa'));
+      }
+    }
+    else
+    {
+      echo 'Error 092: Te haz perdido en la navegacion x.x';
+    }
   }
-  else
+
+  public function AgregarPausa(Request $req)
   {
-    return View('Auth/EditarUsuario')->with('user', $editar);
+    $SelectTipoTiempo = $req->input('SelectTipoTiempo');
+    $valor = $req->input('valor');
+    $etapa = $req->input('etapa');
+
+    if ($valor != null)
+    {
+      Session::put('NumeroEtapa', Session::get('NumeroEtapa')+1);
+      if ($SelectTipoTiempo == 'F')
+      {
+        $data = array('tipo'=>$SelectTipoTiempo,'fecha'=>$valor);
+        DB::table('pausa')->insert($data);
+      }
+      else
+      {
+        $data = array('tipo'=>$SelectTipoTiempo,'tiempo'=>$valor);
+        DB::table('pausa')->insert($data);
+      }
+
+      $NumEtapa = DB::select('select * from pausa ORDER BY idpausa DESC');
+      Session::put('EtapaTrabaja', $NumEtapa[0]->idpausa);
+      $data1 = array('tipoetapa'=>'P','idproceso'=>Session::get('NumProceso'), 'idpausa'=>$NumEtapa[0]->idpausa, 'idestado'=> 6, 'numeroetapa'=>Session::get('NumeroEtapa'));
+      DB::table('flujo')->insert($data1);
+
+      if ($etapa == 'E')
+      {
+        $users=DB::select('select * from usuario ORDER BY idusuario ASC');
+        //var_dump($users);
+        return view('/AgregarEtapa', compact('etapa'), compact('users'));
+      }
+      else
+      {
+        return view('/AgregarEtapa', compact('etapa'));
+      }
+    }
+    else
+    {
+      echo 'Error 092: Te haz perdido en la navegacion x.x';
+    }
+  }
+
+  public function AgregarIntegracion(Request $req)
+  {
+    $etapa = $req->input('etapa');
+
+    if ($etapa != "")
+    {
+      Session::put('NumeroEtapa', Session::get('NumeroEtapa')+1);
+
+      $data = array('etapaproxima'=>null);
+      DB::table('integracion')->insert($data);
+
+      $NumEtapa = DB::select('select * from integracion ORDER BY idintegracion DESC');
+      Session::put('EtapaTrabaja', $NumEtapa[0]->idintegracion);
+      $data1 = array('tipoetapa'=>'I','idproceso'=>Session::get('NumProceso'), 'idintegracion'=>$NumEtapa[0]->idintegracion, 'idestado'=> 6, 'numeroetapa'=>Session::get('NumeroEtapa'));
+      DB::table('flujo')->insert($data1);
+
+      if ($etapa == 'E')
+      {
+        $users=DB::select('select * from usuario ORDER BY idusuario ASC');
+        //var_dump($users);
+        return view('/AgregarEtapa', compact('etapa'), compact('users'));
+      }
+      else
+      {
+        return view('/AgregarEtapa', compact('etapa'));
+      }
+    }
+    else
+    {
+      echo 'Error 092: Te haz perdido en la navegacion x.x';
+    }
+  }
+
+  public function AgregarCondicion(Request $req, $id)
+  {
+    $SelectCondicion = $req->input('SelectCondicion');
+    $SiguienteEtapa = $req->input('SiguienteEtapa');
+
+    if ($SiguienteEtapa != null)
+    {
+
+      $flujo = DB::select('select * from flujo where idflujo = :tip ', ['tip'=>$id]);
+
+      if ($flujo[0]->tipoetapa == 'P')
+      {
+        $pausa = DB::select('select * from pausa where idpausa = :tip ', ['tip'=>$flujo[0]->idpausa]);
+
+
+        $affected = DB::update('update pausa
+        set etapaproxima = :nom  where idpausa = :id',
+        ['nom'=>$SiguienteEtapa, 'id'=>$pausa[0]->idpausa]);
+
+        $affected1 = DB::update('update flujo
+        set idestado = 1 where idflujo = :id',
+        ['id'=>$id]);
+
+        $letra = $flujo[0]->tipoetapa;
+        $users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
+        return view('/ConfigurarEtapas', compact('users'));
+      }
+      elseif ($flujo[0]->tipoetapa == 'E')
+      {
+
+        $etapa = DB::select('select * from etapa where idetapa = :tip ', ['tip'=>$flujo[0]->idetapa]);
+
+
+        $data = array('idetapa'=>$etapa[0]->idetapa, 'condicion'=>$SelectCondicion, 'etapaproxima'=>$SiguienteEtapa);
+        DB::table('detalle_condicion_etapa')->insert($data);
+
+        $affected1 = DB::update('update flujo
+        set idestado = 1 where idflujo = :id',
+        ['id'=>$id]);
+
+        $letra = $flujo[0]->tipoetapa;
+        $users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
+        return view('/ConfigurarEtapas', compact('users'));
+      }
+      else
+      {
+
+        $integracion = DB::select('select * from integracion where idintegracion = :tip ', ['tip'=>$flujo[0]->idintegracion]);
+
+        $affected = DB::update('update integracion
+        set etapaproxima = :nom  where idintegracion = :id',
+        ['nom'=>$SiguienteEtapa, 'id'=>$integracion[0]->idintegracion]);
+
+        $affected1 = DB::update('update flujo
+        set idestado = 1 where idflujo = :id',
+        ['id'=>$id]);
+
+        $letra = $flujo[0]->tipoetapa;
+        $users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
+        return view('/ConfigurarEtapas', compact('users'));
+      }
+    }
+    else
+    {
+      $flujo = DB::select('select * from flujo where idflujo = :tip ', ['tip'=>$id]);
+
+      $Letra = $flujo[0]->tipoetapa;
+      $Condiciones = DB::select('select * from condicion where tipo = :tip', ['tip'=> Session::get('Depto')]);
+      return view('/AgregarCondicion', compact('Condiciones'), compact('id'))->with('Letra', $Letra);
+    }
+  }
+
+  public function AgregarDetalleIntegracion($id)
+  {
+
+    $data = array('idproceso'=>$id, 'idintegracion'=>Session::get('IntegracionSeleccionada'));
+    DB::table('detalle_proceso_integracion')->insert($data);
+
+    $users = DB::select('select * from proceso');
+    return view('/AgregarDetalleIntegracion', compact('users'));
+  }
+
+  public function saber($id)
+  {
+    Session::put('IntegracionSeleccionada', $id);
+
+    $users = DB::select('select * from proceso');
+    return view('/AgregarDetalleIntegracion', compact('users'));
   }
 
 
- }
+  public function ConfigurarEtapas(Request $req)
+  {
+    if (Session::get('EtapaFinal') == 0)
+    {
+      Session::put('NumeroEtapa', Session::get('NumeroEtapa')+1);
+      $data1 = array('tipoetapa'=>'F','idproceso'=>Session::get('NumProceso'), 'idestado'=> 1, 'numeroetapa'=>Session::get('NumeroEtapa'));
+      DB::table('flujo')->insert($data1);
+      Session::put('EtapaFinal', 1);
+    }
+    $users = DB::select('select * from flujo where idproceso = :tip ORDER BY numeroetapa', ['tip'=> Session::get('NumProceso')]);
+    return view('/ConfigurarEtapas', compact('users'));
 
-  public function Reporte1(Request $req){
-
-    $report=DB::select('select c.nombre, c.edad, fo.NombreF from formulario fo,cliente c, respuestacliente f,preguntaformulario p where c.cliente_id=f.cliente_cliente_id and c.edad<18 and f.preguntaformulario_idpreguntaformulario=p.idpreguntaformulario and fo.id_examen=p.formulario_id_examen ');
-
-
-    return view('APrincipales/Reporte1',compact('report'));
   }
 
-  public function Reporte2(Request $req)
-           {
 
-             $report=DB::select('select * from preguntas,');
-
-
-         return view('APrincipales/Reporte2',compact('report'));
-
-            }
-            public function Reporte4(Request $req){
-
-              $report=DB::select('select * from bitacora;');
-
-
-              return view('APrincipales/Reporte4',compact('report'));
-            }
-            public function Reporte3(Request $req){
-
-
-
-              return view('APrincipales/Reporte3');
-            }
-
-            public function Reporte5(Request $req){
-
-              $report=DB::select('SELECT  c.nombre, count(*) as \'Formulario\' from cliente c, respuestacliente rc, preguntaformulario pf where rc.preguntaformulario_idpreguntaformulario=pf.idpreguntaformulario and c.cliente_id=rc.cliente_cliente_id group by c.nombre order BY count(*) DESC  limit 10');
-
-
-                                  return view('APrincipales/Reporte5',compact('report'));
-                                }
-
-
-
-                                public function Reporte8(Request $req)
-                                         {
-
-                                           $report=DB::select('select * from formulario');
-
-
-                                       return view('APrincipales/Reporte8',compact('report'));
-
-                                          }
-
-
-
-
-            public function Reporte6(Request $req){
-
-              $report=DB::select('select c.nombre, f.NombreF from respuestacliente rc, preguntaformulario pf, cliente c, formulario f where rc.cliente_cliente_id=c.cliente_id and pf.idpreguntaformulario=rc.preguntaformulario_idpreguntaformulario group by nombre, NombreF');
-
-
-              return view('APrincipales/Reporte6',compact('report'));
-            }
-            public function Reporte7(Request $req){
-
-              $report=DB::select('select rc.Respuesta, p.pregunta, c.nombre from cliente c,respuestacliente rc, pregunta p, preguntaformulario pf where rc.preguntaformulario_idpreguntaformulario=pf.idpreguntaformulario and c.cliente_id=rc.cliente_cliente_id order by pregunta');
-
-              return view('APrincipales/Reporte7',compact('report'));
-            }
-
-
-
-  public function AgregarPregunta(Request $req)
-  {    $date = new \DateTime();
-		$SelectTipoPregunta = $req->input('SelectTipoPregunta');
-		if ($SelectTipoPregunta != null)
-		{
-
-
-			if ($SelectTipoPregunta == 'Directa')
-			{
-				Session::put('Reporte', 'r1');
-				$NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Agregó pregunta directa']);
-				return view('Questions/CrearPregunta');
-			}
-			elseif ($SelectTipoPregunta == 'OpcionMul')
-			{
-				Session::put('Reporte', 'r2');
-				$NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Agregó pregunta Opcinal']);
-				return view('Questions/CrearPregunta');
-			}
-			elseif ($SelectTipoPregunta == 'VF')
-			{
-				Session::put('Reporte', 'r3');
-				$NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Agregó pregunta falso verdadera']);
-				return view('Questions/CrearPregunta');
-			}
-			elseif ($SelectTipoPregunta == 'Final')
-			{
-				Session::put('Reporte', 'r4');
-				$NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Agregó pregunta Final']);
-				return view('Questions/CrearPregunta');
-			}
-		}
-		else
-		{
-      echo 'jeje juajsujf uasjfuajsdufasd';
-      //Session::put('Reporte', 'r5');
-			//return view('Questions/CrearPregunta');
-		}
-	}
-
-
-
-     public function AgregarPrimeraPregunta(Request $req)
-        {    $date = new \DateTime();
-			Session::put('ContadorPre', 1);
-            $Formulario=Session::get('NombreFormulario');
-             $Pregunta = $req->input('Pregunta');
-             $Respuesta = $req->input('Respuesta');
-
-             $Sig_Pregunta=$req->input('Buena');
-             $Sig_Pregunta_Mala=$req->input('Mala');
-
-		   if ($Sig_Pregunta > Session::get('NumPreg') || $Sig_Pregunta_Mala > Session::get('NumPreg'))
-		   {
-			   echo 'error se intenta acceder a una pregunta inexistente';
-		   }
-		   else
-		   {
-			   if ($Pregunta != null||$Respuesta != null||$Sig_Pregunta != null||$Sig_Pregunta_Mala != null)
-               {
+  public function destroyUser($id) {
+    //DB::table('usuario')->where('idusuario', '=', $id)->delete();
     $date = new \DateTime();
-                DB::table('pregunta')->insert(['pregunta'=>$Pregunta,'respuesta'=>$Respuesta,'TipoPregunta'=>1,'SigPregunta'=>$Sig_Pregunta,'SigPregunta_Mala'=>$Sig_Pregunta_Mala]);
 
-				$NombreF=Session::get('USU');
-	      		DB::table('bitacora')->insert(['nombreUsu'=>$NombreF,'fecha'=>$date,'detalle'=>'Agregó primera pregunta']);
 
-				$Preg = DB::select('select * from pregunta order by idpregunta DESC');
-
-				DB::table('preguntaformulario')->insert(['numemro'=>Session::get('ContadorPre'),'formulario_id_examen'=>Session::get('IdForm'),'pregunta_idpregunta'=>$Preg[0]->idpregunta]);
-                Session::put('ContadorPre', Session::get('ContadorPre') + 1);
-
-
-				return view('Questions/CrearPregunta');
-                }
-				else
-				{
-                   echo 'error';
-               }
-		   }
-
-        }
-
-
-        public function GuardarPreguntaDina(Request $req) // 1-DIRECTA 2-OPCIONMULTIPLE 3-VERFALSO 4-FINAL
-         {
-			if ($req->input('TRB') > Session::get('NumPreg') || $req->input('TRM') > Session::get('NumPreg'))
-		   {
-			   echo 'error se intenta acceder a una pregunta inexistente';
-		   }
-		   else
-		   {
-
-			   if (SESSION::GET('Reporte')=='r1')
-			   {
-				 DB::table('pregunta')->insert(['pregunta'=>$req->input('TPregunta'),'respuesta'=>$req->input('TRespuesta'),'TipoPregunta'=>1,'SigPregunta'=>$req->input('TRB'),'SigPregunta_Mala'=>$req->input('TRM')]);
-				 Session::put('Reporte', 'r5');
-
-
-
-
-				 $Preg = DB::select('select * from pregunta order by idpregunta DESC');
-
-				 DB::table('preguntaformulario')->insert(['numemro'=>Session::get('ContadorPre'),'formulario_id_examen'=>Session::get('IdForm'),'pregunta_idpregunta'=>$Preg[0]->idpregunta]);
-                 Session::put('ContadorPre', Session::get('ContadorPre') + 1);
-
-				 if (Session::get('NumPreg') == Session::get('ContadorPre'))
-				   {
-					   Session::put('Reporte', 'r4');
-					  
-				   }
-
-				 return view('Questions/CrearPregunta');
-			   }
-			   else if (SESSION::GET('Reporte')=='r2')
-			   {
-				 DB::table('pregunta')->insert(['pregunta'=>$req->input('TPregunta'),'respuesta'=>$req->input('TRespuesta'),'TipoPregunta'=>2,'SigPregunta'=>$req->input('TRB'),'SigPregunta_Mala'=>$req->input('TRM'),'respuesta1'=>$req->input('Op1'), 'respuesta2'=>$req->input('Op2'),'respuesta3'=>$req->input('Op3'),'respuesta4'=>$req->input('Op4')]);
-				  Session::put('Reporte', 'r5');
-
-				  $Preg = DB::select('select * from pregunta order by idpregunta DESC');
-
-				 DB::table('preguntaformulario')->insert(['numemro'=>Session::get('ContadorPre'),'formulario_id_examen'=>Session::get('IdForm'),'pregunta_idpregunta'=>$Preg[0]->idpregunta]);
-                 Session::put('ContadorPre', Session::get('ContadorPre') + 1);
-
-				  if (Session::get('NumPreg') == Session::get('ContadorPre'))
-				   {
-					   Session::put('Reporte', 'r4');
-					  				   }
-
-				  return view('Questions/CrearPregunta');
-			   }
-			   else if (SESSION::GET('Reporte')=='r3')
-			   {
-				 DB::table('pregunta')->insert(['pregunta'=>$req->input('TPregunta'),'respuesta'=>$req->input('TRespuesta'),'TipoPregunta'=>3,'SigPregunta'=>$req->input('TRB'),'SigPregunta_Mala'=>$req->input('TRM')]);
-				 Session::put('Reporte', 'r5');
-
-
-				 $Preg = DB::select('select * from pregunta order by idpregunta DESC');
-
-				 DB::table('preguntaformulario')->insert(['numemro'=>Session::get('ContadorPre'),'formulario_id_examen'=>Session::get('IdForm'),'pregunta_idpregunta'=>$Preg[0]->idpregunta]);
-                 Session::put('ContadorPre', Session::get('ContadorPre') + 1);
-
-				 if (Session::get('NumPreg') == Session::get('ContadorPre'))
-				   {
-					   Session::put('Reporte', 'r4');
-
-				   }
-
-				 return view('Questions/CrearPregunta');
-			   }
-			   else if (SESSION::GET('Reporte')=='r4')
-			   {
-
-				 DB::table('pregunta')->insert(['pregunta'=>$req->input('TPregunta'),'TipoPregunta'=>4, 'SigPregunta'=>1,'SigPregunta_Mala'=>1]);
-				  Session::put('Reporte', 'r5');
-
-				  $Preg = DB::select('select * from pregunta order by idpregunta DESC');
-
-
-
-
-
-				 DB::table('preguntaformulario')->insert(['numemro'=>Session::get('ContadorPre'),'formulario_id_examen'=>Session::get('IdForm'),'pregunta_idpregunta'=>$Preg[0]->idpregunta]);
-                 Session::put('ContadorPre', Session::get('ContadorPre') + 1);
-
-
-          if (Session::get('NumPreg') == Session::get('ContadorPre'))
-				   {
-					   Session::put('Reporte', 'r4');
-				   }
-
-         
-				  return view('Questions/Operador');
-			   }
-			   else
-			   {
-				   Session::put('Reporte', 'r5');
-					echo 'error';
-			   }
-		   }
-
-         }
-
-
-         	  public function registrar(Request $req)
-         	  {
-         			$Nombre = $req->input('name');
-         			$Edad = $req->input('edad');
-         			$Direccion = $req->input('dir');
-         			$tel = $req->input('tel');
-         			$corr = $req->input('corr');
-         			$fo = $req->input('SelectForm');
-
-         			if ($Nombre != null)
-         			{
-         				$data = array('nombre'=>$Nombre, 'edad'=>$Edad, 'direccion'=>$Direccion, 'telefono'=>$tel,
-         				'correo_e'=>$corr,'estado'=>0);
-         				DB::table('cliente')->insert($data);
-
-         				$Clien = DB::select('select * from cliente order by cliente_id DESC');
-
-         				Session::put('IdClient', $Clien[0]->cliente_id);
-
-
-
-
-                $Form = DB::select('select * from formulario where id_examen = :nom', ['nom'=>$fo ]);
-         				$exa = $Form[0]->id_examen;
-         				Session::put('IdForm', $exa);
-
-         				return redirect()->route('LeerPublicacion', ['id' => $Form[0]->id_examen]);
-
-         			}
-         			else
-         			{
-         				$Formularios = DB::select('select * from formulario');
-
-         				return View('Auth/Register')->with('pregs',$Formularios);
-         			}
-
-         	  }
-
-            	  public function Leer(Request $req, $id )
-            	{
-
-            		Session::put('IdForm', $id);
-            		$Publicaciones = DB::select('select * from preguntaformulario where formulario_id_examen = :id order by numemro ASC', ['id'=>$id]);
-
-            		$conteo = DB::select('select sum(sub1.Conteo) as Suma from (
-            				select count(p.idpreguntaformulario) as Conteo
-            				from preguntaformulario p
-            				where p.formulario_id_examen = :id
-            				)sub1', ['id'=>$id]);
-
-            		Session::put('ConteoPreguntas', $conteo[0]->Suma);
-            		
-            		$Opcion = $req->input('SelectRespuesta');
-            		if ($Opcion != null)
-            		{
-            			$Actual = Session::get('PreguntaActual');
-            			$Actual = $Actual + 1;
-            			Session::put('PreguntaActual', $Actual);
-
-            			if ($Actual >= Session::get('ConteoPreguntas'))
-            			{
-            				$idsaber = DB::select('select * from preguntaformulario where formulario_id_examen = :id  and numemro = :num ;', ['id'=>Session::get('IdForm'), 'num'=>($Actual-1)]);
-
-            				$data = array('Respuesta'=>$Opcion, 'cliente_cliente_id'=>Session::get('IdClient'),'preguntaformulario_idpreguntaformulario'=>$idsaber[0]->idpreguntaformulario);
-            				DB::table('respuestacliente')->insert($data);
-
-				DB::table('cliente')->where('cliente_id', Session::get('IdClient'))->update(['estado' => 1]);
-            				
-            				return view('/Questions/Operador');
-            			}
-            			else
-            			{
-            				$idsaber = DB::select('select * from preguntaformulario where formulario_id_examen = :id  and numemro = :num ;', ['id'=>Session::get('IdForm'), 'num'=>($Actual)]);
-
-            				$data = array('Respuesta'=>$Opcion, 'cliente_cliente_id'=>Session::get('IdClient'),'preguntaformulario_idpreguntaformulario'=>$idsaber[0]->idpreguntaformulario);
-            				DB::table('respuestacliente')->insert($data);
-
-            				$verificacion = DB::select('select p.respuesta ,p.SigPregunta, p.SigPregunta_Mala
-            									from pregunta p, respuestacliente rc, preguntaformulario pf
-            									where rc.preguntaformulario_idpreguntaformulario = :id and rc.preguntaformulario_idpreguntaformulario = pf.idpreguntaformulario and pf.pregunta_idpregunta = p.idpregunta',
-            									['id'=>$idsaber[0]->idpreguntaformulario]);
-
-            				if ($verificacion[0]->respuesta == $Opcion)
-            				{
-            					$Actual = $verificacion[0]->SigPregunta - 1;
-            				}
-            				else
-            				{
-            					$Actual = $verificacion[0]->SigPregunta_Mala - 1;
-            				}
-
-            				$enun = DB::select('select * from pregunta where idpregunta = :pre', ['pre'=>$Publicaciones[$Actual]->pregunta_idpregunta]);
-            				Session::put('Pregunta', $enun[0]->pregunta);
-            				Session::put('TipPreg', $enun[0]->TipoPregunta);
-
-            				$preguntas = DB::select('select * from pregunta where idpregunta = :pre', ['pre'=>$Publicaciones[$Actual]->pregunta_idpregunta]);
-
-            				return View('Questions/LeerPublicacion')->with('pregs',$preguntas);
-            			}
-            		}
-            		else
-            		{
-            				Session::put('PreguntaActual', 0);
-
-            				$enun = DB::select('select * from pregunta where idpregunta = :pre', ['pre'=>$Publicaciones[0]->pregunta_idpregunta]);
-
-            				Session::put('Pregunta', $enun[0]->pregunta);
-            				Session::put('TipPreg', $enun[0]->TipoPregunta);
-
-            				$preguntas = DB::select('select * from pregunta where idpregunta = :pre', ['pre'=>$Publicaciones[0]->pregunta_idpregunta]);
-
-            				return View('Questions/LeerPublicacion')->with('pregs',$preguntas);
-            		}
-            	}
-
-
- public function grafica() {
-        $chartjs = app()->chartjs
-                ->name('lineChartTest')
-                ->type('line')
-                ->size(['width' => 400, 'height' => 200])
-                ->labels(['January', 'February', 'March', 'April', 'May', 'June', 'July'])
-                ->datasets([
-                    [
-                        "label" => "My First dataset",
-                        'backgroundColor' => "rgba(38, 185, 154, 0.31)",
-                        'borderColor' => "rgba(38, 185, 154, 0.7)",
-                        "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
-                        "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
-                        "pointHoverBackgroundColor" => "#fff",
-                        "pointHoverBorderColor" => "rgba(220,220,220,1)",
-                        'data' => [65, 59, 80, 81, 56, 55, 40],
-                    ],
-                    [
-                        "label" => "My Second dataset",
-                        'backgroundColor' => "rgba(38, 185, 154, 0.31)",
-                        'borderColor' => "rgba(38, 185, 154, 0.7)",
-                        "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
-                        "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
-                        "pointHoverBackgroundColor" => "#fff",
-                        "pointHoverBorderColor" => "rgba(220,220,220,1)",
-                        'data' => [12, 33, 44, 44, 55, 23, 40],
-                    ]
-                ])
-                ->options([]);
-
-        return view('APrincipales/example', compact('chartjs'));
-
-        }
-
-
-public function chartjs()
+    echo "Record deleted successfully.<br/>";
+    echo '<a href="/Operador">Click Here</a> to go back.';
+  }
+
+
+//$Condiciones
+public function destroyCondicion($id) {
+  DB::table('condicion')->where('condicion', '=', $id)->delete();
+return redirect("/DropCondicion");
+}
+
+public function modifyCondicion($id) {
+  Session::put('modifystate',$id);
+return redirect("/ModifyCondicion1");
+}
+
+public function actualizarCondicion(Request $req) {
+  $Condicion = Session::get('modifystate');
+  $Descripcion = $req->input('Descripcion');
+  $Valor = $req->input('Valor');
+  DB::table('condicion')
+            ->where('condicion', $Condicion)
+            ->update(['descripcion' => $Descripcion,'valor'=>$Valor]);
+Session::put('modifystate',"");
+return redirect('/ModifyCondicion');
+}
+
+  public function AddCondicion(Request $req) {
+    $Condicion = $req->input('Condicion');
+    $Descripcion = $req->input('Descripcion');
+
+    $Valor = $req->input('Valor');
+
+
+    if ($Condicion != null)
+    {
+      $check = DB::table('condicion')->where(['condicion'=>$Condicion])->get();
+      if(count($check)==0){
+        $data = array('condicion'=>$Condicion,'valor'=>$Valor, 'descripcion'=>$Descripcion, 'tipo'=>"F");
+        DB::table('condicion')->insert($data);
+
+
+
+        return    redirect('/Usuarios');
+
+
+      }
+      else
+      {
+        Session::put('error',"ErrorCondicion");
+        return redirect('/AddCondicion');
+      }
+
+
+    }
+    else
+    {
+        Session::put('error',"ErrorCondicion");
+      return redirect('/AddCondicion');
+    }
+  }
+  //$Proceso
+  public function destroyProceso($id) {
+    DB::table('flujo')->where('idproceso', '=', $id)->delete();
+  DB::table('detalle_proceso_departamento')->where('idproceso', '=', $id)->delete();
+    DB::table('detalle_proceso_integracion')->where('idproceso', '=', $id)->delete();
+    DB::table('proceso')->where('idproceso', '=', $id)->delete();
+  return redirect("/DropProcess");
+  }
+
+//Gestion
+public function AnadirGestion(Request $req)
 {
-    $viewer = View::select(DB::raw("SUM(numberofview) as count"))
-        ->orderBy("created_at")
-        ->groupBy(DB::raw("year(created_at)"))
-        ->get()->toArray();
-    $viewer = array_column($viewer, 'count');
+  $proceso = $req->input('process');
+    $tipos = DB::table('proceso')->where(['idproceso'=>$proceso])->get();
 
-    $click = Click::select(DB::raw("SUM(numberofclick) as count"))
-        ->orderBy("created_at")
-        ->groupBy(DB::raw("year(created_at)"))
-        ->get()->toArray();
-    $click = array_column($click, 'count');
+    if ($tipos[0]->tipo =='A')
+    {
 
+Session::put('proceso',$proceso);
+      return redirect("/AddActivity");
+    }else if($tipos[0]->tipo == 'D')
+    {
+      Session::put('proceso',$proceso);
+            return redirect("/AddDocument");
+    }
 
-    return view('APrincipales/chartjs')
-            ->with('viewer',json_encode($viewer,JSON_NUMERIC_CHECK))
-            ->with('click',json_encode($click,JSON_NUMERIC_CHECK));
+return redirect("/AddGestion");
+}
+
+//Actividad
+public function AnadirActividad(Request $req)
+{
+  $proceso = Session::get('proceso');
+  $data = array('nombre'=>$req->input('nombre'),'fechahora'=>$req->input('fecha'), 'descripcion'=>$req->input('Descripcion'), 'coordinador'=>$req->input('coordinador'),'lugar'=>$req->input('lugar'));
+  DB::table('actividad')->insert($data);
+  $noactividad=DB::table('actividad')->max('idactivdiad');
+  $data2 =array('tipo'=>'A','usuarioregistrador'=>Session::get('User'),'idactivdiad'=>$noactividad,'idproceso'=>$proceso);
+  DB::table('gestion')->insert($data2);
+
+return redirect("/AddGestion");
 }
 
 
+//Documento
+public function AnadirDocumento(Request $req)
+{
+  $proceso = Session::get('proceso');
+  $data = array('nombre'=>$req->input('nombre'),'fechahora'=>$req->input('fechahora'), 'descripcion'=>$req->input('Descripcion'), 'ruta'=>$req->input('ruta'),'proceso'=>$proceso);
+  DB::table('documento')->insert($data);
+  $noactividad=DB::table('documento')->max('iddocumento');
+  $data2 =array('tipo'=>'D','usuarioregistrador'=>Session::get('User'),'iddocumento'=>$noactividad,'idproceso'=>$proceso);
+  DB::table('gestion')->insert($data2);
 
-
-
-public function index()
-    {
-        $chart = Charts::multi('bar', 'material')
-            // Setup the chart settings
-            ->title("My Cool Chart")
-            // A dimension of 0 means it will take 100% of the space
-            ->dimensions(0, 400) // Width x Height
-            // This defines a preset of colors already done:)
-            ->template("material")
-            // You could always set them manually
-            // ->colors(['#2196F3', '#F44336', '#FFC107'])
-            // Setup the diferent datasets (this is a multi chart)
-            ->dataset('Element 1', [5,20,100])
-            ->dataset('Element 2', [15,30,80])
-            ->dataset('Element 3', [25,10,40])
-            // Setup what the values mean
-            ->labels(['One', 'Two', 'Three']);
-
-        return view('test', ['chart' => $chart]);
-    }
-
-
-	 public function statistcs(){
-
-	 	$data= DB::table('usuario')->get(['']);
-	 	return view ('pages.statistics')->with('data',$data);
-	 }
-		
-
-
-    public function destroyUser($id) {
-//DB::table('usuario')->where('idusuario', '=', $id)->delete();
-       $date = new \DateTime();
-
-
-     echo "Record deleted successfully.<br/>";
-     echo '<a href="/Operador">Click Here</a> to go back.';
-  }
+return redirect("/AddGestion");
+}
 
 }
