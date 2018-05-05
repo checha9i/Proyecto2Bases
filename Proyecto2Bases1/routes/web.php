@@ -223,12 +223,10 @@ Route::post('/AnadirDocumento','Controller@AnadirDocumento');
 Route::post('/AnadirActividad','Controller@AnadirActividad');
 //deletes
 Route::get('deleteUser/{id}','Controller@destroyUser') ;
-<<<<<<< HEAD
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-=======
 Route::get('deleteCondicion/{id}','Controller@destroyCondicion') ;
 Route::get('deleteProceso/{id}','Controller@destroyProceso') ;
 Route::get('deleteGestion/{id}','Controller@destroyGestion') ;
@@ -249,4 +247,3 @@ Route::post('/consulta5','Controller@consulta5');
 Route::post('/consulta6','Controller@consulta6');
 Route::post('/consulta8','Controller@consulta8');
 Route::post('/consulta12','Controller@consulta12');
->>>>>>> master
