@@ -20,7 +20,7 @@ class loginController extends BaseController
 
     if(count($checkLogin)  >0)
     {
-
+  Session::put('boolnotificacion',0) ;
 
       $permiso4= DB::table('detalle_permiso')->where(['permiso'=>4,'idusuario'=>$checkLogin[0]->idusuario])->get();
 if(count($permiso4)>0){

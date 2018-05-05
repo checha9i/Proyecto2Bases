@@ -1,12 +1,9 @@
 <?php
 //Creando conexion
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
+$report=DB::table('gestion')->where(['usuarioregistrador'=>Session::get('User')])->get();
 $nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->count();
 $notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->get();
-if(Session::get('error')=="ErrorCondicion"){
-echo "<script type=\"text/javascript\">alert(\"Ya existe la condicion\");</script>";
-Session::put('error',"");
-}
 ?>
 
 <!doctype html>
@@ -139,7 +136,7 @@ Session::put('error',"");
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 8</a>
               <ul class="sub-menu children dropdown-menu">
-            <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
+                <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
 
               </ul>
             </li>
@@ -203,7 +200,6 @@ Session::put('error',"");
               </div>
             <?php endif; ?>
 
-
           </div>
         </div>
 
@@ -234,7 +230,7 @@ Session::put('error',"");
         <div class="page-header float-right">
           <div class="page-title">
             <ol class="breadcrumb text-right">
-              <li class="active">Agregar Condicion</li>
+              <li class="active">User</li>
             </ol>
           </div>
         </div>
@@ -242,31 +238,25 @@ Session::put('error',"");
     </div>
 
     <div  id="contenido" name="contenido" class="content mt-3">
-      <form action="/AddCondition" method="post">
-        <div class="form-group">
-          <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        </div>
-        <div class="form-group">
-          <input type="text"  class="form-control" name="Condicion" value="Condicion" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Condicion';}" >
-        </div>
-        <div class="form-group">
 
-          <input type="text"  class="form-control" name="Valor" value="Valor" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Valor';}" >
-        </div>
-        <div class="form-group">
+      <table class="table table-striped table-bordered" border = "5">
+              <tr>
+                     <th>Gestion</th>
+                     <th>Tipo</th>
+                     <th>Proceso</th>
+                <th></th>
+              </tr>
+                 @foreach($report as $u)
+                 <tr>
+                    <td>{{ $u->idgestion }}</td>
+                    <td>{{ $u->tipo }}</td>
+                    <td>{{ $u->idproceso }}</td>
 
-          <input type="text"  class="form-control" name="Descripcion" value="Descripcion" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Descripcion';}" >
-        </div>
-        <div class="form-group">
-          <div class="submit">
-            <input class="register-link m-t-15 text-center" type="submit" onclick="myFunction()" value="Agregar Condicion" >
-          </div>
-        </div>
+    <td> <a href="/deleteGestion/{{$u->idgestion}}" class="btn btn_danger"> <i class="fa fa-minus"></i> Eliminar</a>
 
-
-      </form>
-
-
+                 </tr>
+                 @endforeach
+           </table>
 
 
 

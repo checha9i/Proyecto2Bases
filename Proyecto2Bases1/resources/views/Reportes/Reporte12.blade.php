@@ -3,10 +3,7 @@
 $permisos=DB::table('detalle_permiso')->where(['idusuario'=>Session::get('User')])->get();
 $nonotificiones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->count();
 $notificaciones=DB::table('notificacion')->where(['idusuario'=>Session::get('User')])->get();
-if(Session::get('error')=="ErrorCondicion"){
-echo "<script type=\"text/javascript\">alert(\"Ya existe la condicion\");</script>";
-Session::put('error',"");
-}
+
 ?>
 
 <!doctype html>
@@ -90,6 +87,7 @@ Session::put('error',"");
                 <li><i class="fa fa-area-chart"></i><a href="/Reporte12">Reporte 12</a></li>
                 <li><i class="fa fa-area-chart"></i><a href="/Reporte13">Reporte 13</a></li>
                 <li><i class="fa fa-area-chart"></i><a href="/Reporte14">Reporte 14</a></li>
+
               </ul>
             </li>
           <?php elseif ($u->permiso==2): ?>
@@ -100,10 +98,8 @@ Session::put('error',"");
 
               </ul>
             </li>
-
           <?php elseif ($u->permiso==3): ?>
-        <?php
-        Session::put('boolnotificacion',1) ?>
+        <?php Session::put('boolnotificacion',1) ?>
 
           <?php elseif ($u->permiso==5): ?>
             <li class="menu-item-has-children dropdown">
@@ -113,7 +109,6 @@ Session::put('error',"");
 
               </ul>
             </li>
-
 
 
 
@@ -139,7 +134,7 @@ Session::put('error',"");
             <li class="menu-item-has-children dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Nivel permiso 8</a>
               <ul class="sub-menu children dropdown-menu">
-            <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
+                <li><i class="fa fa-minus"></i><a href="/DropProcess">Eliminar Proceso</a></li>
 
               </ul>
             </li>
@@ -167,7 +162,6 @@ Session::put('error',"");
         <div class="col-sm-7">
           <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
           <div class="header-left">
-
 
             <?php if (Session::get('boolnotificacion')==1 ): ?>
               <div class="dropdown for-notification">
@@ -204,6 +198,7 @@ Session::put('error',"");
             <?php endif; ?>
 
 
+
           </div>
         </div>
 
@@ -234,7 +229,7 @@ Session::put('error',"");
         <div class="page-header float-right">
           <div class="page-title">
             <ol class="breadcrumb text-right">
-              <li class="active">Agregar Condicion</li>
+              <li class="active">User</li>
             </ol>
           </div>
         </div>
@@ -242,32 +237,21 @@ Session::put('error',"");
     </div>
 
     <div  id="contenido" name="contenido" class="content mt-3">
-      <form action="/AddCondition" method="post">
-        <div class="form-group">
-          <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        </div>
-        <div class="form-group">
-          <input type="text"  class="form-control" name="Condicion" value="Condicion" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Condicion';}" >
-        </div>
-        <div class="form-group">
 
+      <form action="/consulta12" method="post">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <div class="form-group">
           <input type="text"  class="form-control" name="Valor" value="Valor" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Valor';}" >
         </div>
         <div class="form-group">
-
-          <input type="text"  class="form-control" name="Descripcion" value="Descripcion" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Descripcion';}" >
+          <input type="text"  class="form-control" name="Valor2" value="Valor" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Valor';}" >
         </div>
         <div class="form-group">
           <div class="submit">
-            <input class="register-link m-t-15 text-center" type="submit" onclick="myFunction()" value="Agregar Condicion" >
+            <input class="register-link m-t-15 text-center" type="submit" onclick="myFunction()" value="Enviar" >
           </div>
         </div>
-
-
       </form>
-
-
-
 
 
     </div> <!-- .content -->
