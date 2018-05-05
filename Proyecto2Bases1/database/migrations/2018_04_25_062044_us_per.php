@@ -13,7 +13,7 @@ class UsPer extends Migration
      */
     public function up()
     {
-        Schema::create('UsuPermiso', function (Blueprint $table) {
+          Schema::create('UsuPermiso', function (Blueprint $table) {
           $table->increments('id');
           $table->string('NOMBRE');
           $table->string('PERMISO');
@@ -28,6 +28,6 @@ class UsPer extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('UsuPermiso');
     }
 }

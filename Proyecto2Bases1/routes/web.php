@@ -45,12 +45,25 @@ Route::get('/graficar', function () {
 });
 
 
+
+
 Route::get('/CargaUsuario', 'Controller@CargaUsuarios');
+Route::post('items/import', 'Controller@import');
+Route::get('items/export', 'Controller@export');
 
 
+Route::post('/parser', 'ImportController@parser');
+
+//CARGA USUARIO
+Route::get('/cargaUsus', 'ImportController@getImport')->name('import');
+Route::post('/import_parse', 'ImportController@parseImport')->name('import_parse');
+Route::post('/import_process', 'ImportController@processImport')->name('import_process');
 
 
 // JEJEJEJEJEJEJE
+
+
+
 
 
 
@@ -124,3 +137,7 @@ Route::post('/registerme','LoginController@register');
 
 //deletes
 Route::get('deleteUser/{id}','Controller@destroyUser') ;
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

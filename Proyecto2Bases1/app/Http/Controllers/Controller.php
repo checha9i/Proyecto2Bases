@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Maatwebsite\Excel\Facades\Excel;
+
+
+
+
 use DB;
 use Session;
 
@@ -18,6 +23,52 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+
+
+ public function CargaUsuarios()
+     {
+      $items=DB::SELECT('SELECT * FROM UsuPermiso');
+          return view('CargaUsuario/uspermiso',compact('items'));
+
+
+     }
+
+
+ public function import(Request $request)
+    {
+      if($request->file('imported-file'))
+      {
+                $path = $request->file('imported-file')->getRealPath();
+      
+
+            $data = Excel::load($path, function($reader) {})->get()->toArray();
+        } else {
+            $data = array_map('str_getcsv', file($path));
+        }
+
+          if(!empty($data) && $data->count())
+          {
+            foreach ($data->toArray() as $row)
+            {
+              if(!empty($row))
+              {
+                $dataArray[] =
+                [
+                  'item_name' => $row['NOMBRE'],
+                  'item_code' => $row['PERMISO'],
+                  'item_price' => $row['Detalle'],
+                 
+                ];
+              }
+          }
+          if(!empty($dataArray))
+          {
+             Item::insert($dataArray);
+             return back();
+           }
+         }
+       }
+  
 
 
 
@@ -696,9 +747,7 @@ public function index()
 	 }
 		
 
-		
 
-=======
     public function destroyUser($id) {
 //DB::table('usuario')->where('idusuario', '=', $id)->delete();
        $date = new \DateTime();
@@ -707,5 +756,5 @@ public function index()
      echo "Record deleted successfully.<br/>";
      echo '<a href="/Operador">Click Here</a> to go back.';
   }
->>>>>>> master
+
 }

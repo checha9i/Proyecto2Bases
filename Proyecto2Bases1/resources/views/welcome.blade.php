@@ -33,10 +33,11 @@
     				<ul class="links">
     					<li><a href="/">Home</a></li>
     					<li><a href="/login">Login</a></li>
-    					<li><a href="/register">Elements</a></li>
-                    
-                      
+    					<li><a href="/register">Elements</a></li>   
                         <li><a href="https://demo.bpmn.io/new">Graficar</a></li>
+                        <li><a href="/cargaUsus">Carga Usuarios</a></li> 
+
+                        
     				</ul>
     			</nav>
 
